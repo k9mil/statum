@@ -42,8 +42,4 @@ If you wish to contribute, f.e, making an improvement to this web app then feel 
 
 ## License 📖
 
-<<<<<<< HEAD
 Licensed under the MIT License - see the [LICENSE file](https://github.com/k9mil/statum/blob/master/LICENSE) for more details.
-=======
-Licensed under the MIT License - see the [LICENSE file](https://github.com/k9mil/statum/blob/master/LICENSE) for more details.
->>>>>>> origin/master
