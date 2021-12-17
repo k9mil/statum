@@ -2,21 +2,13 @@ from flask import Blueprint, render_template, request, session, url_for, redirec
 from statum.config import Config
 from dateutil import parser
 from furl import furl
-<<<<<<< HEAD
-from statum.users.models import User
-=======
 from statum.users.models import User, System
 from statum import database
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
 import httpx, datetime, json, time
 
 main = Blueprint('main', __name__)
 
-<<<<<<< HEAD
-login_url = "https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=xhrzck2b40wioai0i2uye7319cdxuk&redirect_uri=http://localhost:5000/dashboard&scope=openid+user:read:email&claims={'id_token'}"
-=======
 login_url = "https://id.twitch.tv/oauth2/authorize?client_id=xhrzck2b40wioai0i2uye7319cdxuk&redirect_uri=http://localhost:5000/dashboard&response_type=code&scope=openid+user:read:email&claims={'id_token'}"
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
 
 @main.route("/")
 def index():
@@ -28,20 +20,6 @@ def index():
 async def dashboard():
     f = furl(request.full_path) 
     streamer_data = {}
-<<<<<<< HEAD
-    
-    if f.args:
-        await send_requests(streamer_data, twitch_login())
-        return redirect(url_for("main.dashboard"))
-    
-    if session:
-        streamer_list = session["user"]["follower_list"]
-        await send_requests(streamer_data, streamer_list)
-    else:
-        streamer_list = load_default_data()
-        await send_requests(streamer_data, streamer_list)
-
-=======
 
     if session:
         streamer_list = session["user"]["follower_list"]
@@ -53,7 +31,6 @@ async def dashboard():
         twitch_login(header)
     
     await send_requests(streamer_data, streamer_list)
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
     return render_template("dashboard.html", live_data=streamer_data, login_url=login_url)
 
 @main.route("/streamer/<streamer_name>")
@@ -82,9 +59,6 @@ def load_default_data():
         json_data.close()
         return streamer_list
 
-<<<<<<< HEAD
-def twitch_login():
-=======
 def generateToken():
     f = furl(request.full_path)
     user_auth_url = f"https://id.twitch.tv/oauth2/token?client_id=xhrzck2b40wioai0i2uye7319cdxuk&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=http://localhost:5000&code={f.args['code']}"
@@ -99,59 +73,23 @@ def generateBearer():
     return header
 
 def twitch_login(header):
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
     streamer_list = {}
     users_url = "https://api.twitch.tv/helix/users"
 
     if session:
         user_data_id = session["user"]["_id"]
     else:
-<<<<<<< HEAD
-        f = furl(request.full_path)
-        user_auth_url = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=http://localhost:5000&code={f.args['code']}"
-        post_auth = httpx.post(user_auth_url).json()
-        header = {'Authorization': 'Bearer ' + post_auth["access_token"], 'Client-ID': Config.CLIENT_ID}
-=======
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
         response_result = httpx.get(users_url, headers=header).json()
         user_data_id = response_result["data"][0]["id"]
 
     users_follow = f"https://api.twitch.tv/helix/users/follows?from_id={user_data_id}"
-<<<<<<< HEAD
-    users_follow_request = httpx.get(users_follow, headers={'Authorization': 'Bearer ' + "d9crvpuiz3x0jos525d272swtfn0ev", 'Client-ID': Config.CLIENT_ID}).json() #temp
-=======
     users_follow_request = httpx.get(users_follow, headers=header).json()
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
     follow_count = len(users_follow_request["data"])
 
     for value in range(follow_count):
         streamer_name = users_follow_request["data"][value]["to_name"]
         streamer_list[streamer_name] = f"https://twitch.tv/{streamer_name}"
     
-<<<<<<< HEAD
-    User().twitch_signup(user_data_id ,streamer_list)
-    return streamer_list 
-
-async def send_requests(streamer_data, streamer_list):
-    header = {'Authorization': 'Bearer ' + "d9crvpuiz3x0jos525d272swtfn0ev", 'Client-ID': Config.CLIENT_ID} #temp
-    async with httpx.AsyncClient() as client:
-        for streamer in streamer_list:
-            stream_url = "https://api.twitch.tv/helix/search/channels?query=" + streamer
-            pre_presponse = await client.get(stream_url, headers=header)
-            presponse = pre_presponse.json()
-            results = len(presponse["data"])
-            populate_data(results, streamer_data, presponse, streamer)
-
-def populate_data(results, streamer_data, presponse, streamer):
-    for numb in range(results):
-        if presponse["data"][numb]["broadcaster_login"] == streamer.lower():
-            try:
-                if presponse["data"][numb]["is_live"] == True:
-                    streamer_data[streamer] = ["LIVE", presponse["data"][numb]["game_name"], epoch_conversion(presponse, numb)]
-                else:
-                    streamer_data[streamer] = ["NOT LIVE", "none", "none"]
-            except parser.ParserError as e:
-=======
     User().twitchSignup(user_data_id, streamer_list)
     return streamer_list 
 
@@ -200,7 +138,6 @@ def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
                 # else:
                 #     streamer_data[streamer] = ["NOT LIVE", "none", "none"]
             except parser.ParserError:
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
                 pass
             break
         else:
@@ -209,12 +146,7 @@ def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
 
 def temp_get_vods(streamer):
     vod_data = {}
-<<<<<<< HEAD
-
-    header = {'Authorization': 'Bearer ' + "d9crvpuiz3x0jos525d272swtfn0ev", 'Client-ID': Config.CLIENT_ID} #temp
-=======
     header = generateBearer()
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
 
     userIDURL = f"https://api.twitch.tv/helix/users?login={streamer}"
     responseB = httpx.get(userIDURL, headers=header)
@@ -234,17 +166,11 @@ def temp_get_vods(streamer):
             else:
                 thumbnail_url = thumbnail_url.replace("%{width}x%{height}.jpg", "1920x1080.jpg")
                 vod_data[n] = [thumbnail_url, vod_url, title, duration]
-<<<<<<< HEAD
-    except IndexError as i:
-=======
     except IndexError:
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
         pass
     
     return vod_data
 
-<<<<<<< HEAD
-=======
 def tmpEpoch(data):
     time_now = datetime.datetime.utcnow()
     epoch_current = int(time.mktime(time_now.timetuple()))
@@ -254,7 +180,6 @@ def tmpEpoch(data):
     epoch_final = str(datetime.timedelta(seconds=epoch_diff))
     return epoch_final
 
->>>>>>> 937744f (long break from codebase. changed a lot. upgraded request system by optimizing twitch api limitations.)
 def epoch_conversion(presponse, numb):
     time_now = datetime.datetime.utcnow()
     epoch_current = int(time.mktime(time_now.timetuple()))
