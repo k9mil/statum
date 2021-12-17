@@ -1,0 +1,220 @@
+/* Global Setting/Variables */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* HTML/BODY */
+
+html, body {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    width: 100%;
+    height: 100%;
+    background-color: #121313;
+    color: rgb(150, 150, 150);
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    margin: 0;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Top area */
+
+.top-area .top-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 39%;
+    height: 90vh;
+    margin: 0 auto;
+}
+
+.top-area .top-header .header-text {
+    margin: 15px 0px;
+    text-align: center;
+}
+
+.top-area .top-header h1 {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #6441a5;
+}
+
+.top-area .top-header h2 {
+    font-weight: 700;
+    font-size: 4rem;
+    color: rgb(255, 255, 255);
+}
+
+.top-area .top-header h3 {
+    font-weight: 500;
+    font-size: 1.17rem;
+    color: rgb(150, 150, 150);
+}
+
+.top-area .top-header a {
+    text-decoration: none;
+}
+
+.top-area .top-header a:hover {
+    color: #6441a5;
+}
+
+/* Streamer area */
+
+.streamer-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    height: 90%;
+    margin: 0 auto;
+    max-width: 49%;
+}
+
+.streamer-area .div-streamer { 
+    padding: 2rem;
+    border: 0 solid;
+    border-width: 1px;
+    border-radius: .375rem;
+    border-color: rgba(31,41,55);
+    margin-bottom: 1rem;
+}
+
+.streamer-area .div-streamer h1 {
+    font-weight: 500;
+    color: rgb(255, 255, 255);
+}
+
+.live {
+    color: green;
+}
+
+.not-live {
+    color: red;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+}
+
+/* Vod Results */
+
+.vod-results {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-row-gap: 5em;
+    max-width: 75%;
+    margin: 0 auto;
+    padding-top: 100px;
+}
+
+.vod-results a {
+    height: 240px;
+    width: 426px;
+}
+
+.vod-object {
+    display: flex;
+    flex-direction: column;
+    border: 0 solid;
+    border-width: 1px;
+    border-radius: .375rem;
+    background-color: #191a1e;
+    border-color: #6441a5;
+    margin: 0px 15px;
+}
+
+.vod-object .vod-data {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.vod-results .vod-object .vod-data img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+}
+
+.vod-results .vod-object .vod-data h1 {
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    font-weight: 500;
+    overflow: hidden;
+}
+
+.vod-results .vod-object .vod-data .time {
+    position: absolute;
+    top: 90%;
+    left: 85%;
+    transform: translate( -50%, -50% );
+    padding: 2px 8px;
+    border-radius: 3px;
+    background-color: rgba(0,0,0,.7);
+    border: 0 solid;
+}
+
+.vod-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.vod-top .vod-header {
+    color: rgb(255, 255, 255);
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    padding-top: 3rem;
+}
+
+.vod-object .vod-title h1 {
+    color: rgb(255, 255, 255);
+    margin: 10px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* Footer area */
+
+.footer {
+    margin-top: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.footer a {
+    color: rgb(150, 150, 150);
+    margin-right: 35px;
+}
+
+.footer a:hover {
+    color: #6441a5;
+}
+
+.footer .twitch {
+    font-weight: 700;
+    color: #6441a5;
+}
