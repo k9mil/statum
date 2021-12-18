@@ -61,7 +61,7 @@ def load_default_data():
 
 def generateToken(*bearer):
     f = furl(request.full_path)
-    
+
     if bearer:
         URL = f"https://id.twitch.tv/oauth2/token?client_id=xhrzck2b40wioai0i2uye7319cdxuk&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
     else:
@@ -81,13 +81,13 @@ def twitch_login(header):
         response_result = httpx.get(users_url, headers=header).json()
         user_data_id = response_result["data"][0]["id"]
 
-    users_follow = f"https://api.twitch.tv/helix/users/follows?from_id={user_data_id}"
-    users_follow_request = httpx.get(users_follow, headers=header).json()
-    follow_count = len(users_follow_request["data"])
+    usersFollowedURL = f"https://api.twitch.tv/helix/users/follows?from_id={user_data_id}"
+    followRequest = httpx.get(usersFollowedURL, headers=header).json()
+    streamersFollowed = len(followRequest["data"])
 
-    for value in range(follow_count):
-        streamer_name = users_follow_request["data"][value]["to_name"]
-        streamer_list[streamer_name] = f"https://twitch.tv/{streamer_name}"
+    for value in range(streamersFollowed):
+        streamerName = followRequest["data"][value]["to_name"]
+        streamer_list[streamerName] = f"https://twitch.tv/{streamerName}"
     
     User().twitchSignup(user_data_id, streamer_list)
     return streamer_list 
@@ -97,17 +97,10 @@ async def send_requests(streamer_data, streamer_list):
     indexStreamerData(header, streamer_list, streamer_data)
     loadStreamers(header, streamer_list, streamer_data)
 
-def tempFunc(streamer_data, getDetailsJSON, streamer_list):
-    for n in getDetailsJSON:
-        # if n['user_name'] in streamer_list:
-        streamer_data[n['user_name']] = ["LIVE", n["game_name"], tmpEpoch(n)]
-        # else:
-            #  streamer_data[n['user_name']] = ["NOT LIVE", "none", "none"]
-    return streamer_data
-
-
 def loadStreamers(header, streamer_list, streamer_data):
     stream_url = "https://api.twitch.tv/helix/streams?"
+    liveStreamers = []
+    notLiveStreamers = []
 
     for streamer in streamer_list:
         stream_url += "user_login=" + streamer + "&"
@@ -115,7 +108,23 @@ def loadStreamers(header, streamer_list, streamer_data):
     getDetails = httpx.get(stream_url, headers=header)
     getDetailsJSON = getDetails.json()
 
-    tempFunc(streamer_data, getDetailsJSON['data'], streamer_list)
+    for n in getDetailsJSON['data']:
+        liveStreamers.append(n['user_name'])
+    
+    for n in streamer_list:
+        if n not in liveStreamers:
+            notLiveStreamers.append(n)
+    
+    showStreamerData(streamer_data, getDetailsJSON['data'], notLiveStreamers)
+
+def showStreamerData(streamer_data, getDetailsJSON, notLiveStreamers):
+    for n in getDetailsJSON:
+        streamer_data[n['user_name']] = ["LIVE", n["game_name"], epochConversion(data = n)]
+
+    for n in notLiveStreamers:
+        streamer_data[n] = ["NOT LIVE", "none", "none"]
+
+    return streamer_data
 
 async def indexStreamerData(header, streamer_list, streamer_data):
     async with httpx.AsyncClient() as client:
@@ -137,7 +146,7 @@ def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
             try:
                 System().indexStreamer(getDetailsJSON["data"][numb]["id"], getDetailsJSON["data"][numb]["broadcaster_login"])
                 if getDetailsJSON["data"][numb]["is_live"] == True:
-                    streamer_data[streamer] = ["LIVE", getDetailsJSON["data"][numb]["game_name"], epoch_conversion(getDetailsJSON, numb)]
+                    streamer_data[streamer] = ["LIVE", getDetailsJSON["data"][numb]["game_name"], epochConversion(jsonData=getDetailsJSON, index=numb)]
                 # else:
                 #     streamer_data[streamer] = ["NOT LIVE", "none", "none"]
             except parser.ParserError:
@@ -174,20 +183,12 @@ def temp_get_vods(streamer):
     
     return vod_data
 
-def tmpEpoch(data):
-    time_now = datetime.datetime.utcnow()
-    epoch_current = int(time.mktime(time_now.timetuple()))
-    twitch_api_date_parsed = parser.parse(data["started_at"]).strftime("%d.%m.%Y %H:%M:%S")
-    epoch_twitch = int(time.mktime(time.strptime(twitch_api_date_parsed, "%d.%m.%Y %H:%M:%S")))
-    epoch_diff = epoch_current - epoch_twitch
-    epoch_final = str(datetime.timedelta(seconds=epoch_diff))
-    return epoch_final
+def epochConversion(**kwargs):
+    if not kwargs['data']:
+        twitch_api_date_parsed = parser.parse(kwargs['jsonData']["data"][kwargs['index']]["started_at"]).strftime("%d.%m.%Y %H:%M:%S")
+    else: 
+        twitch_api_date_parsed = parser.parse(kwargs['data']["started_at"]).strftime("%d.%m.%Y %H:%M:%S")
 
-def epoch_conversion(presponse, numb):
-    time_now = datetime.datetime.utcnow()
-    epoch_current = int(time.mktime(time_now.timetuple()))
-    twitch_api_date_parsed = parser.parse(presponse["data"][numb]["started_at"]).strftime("%d.%m.%Y %H:%M:%S")
-    epoch_twitch = int(time.mktime(time.strptime(twitch_api_date_parsed, "%d.%m.%Y %H:%M:%S")))
-    epoch_diff = epoch_current - epoch_twitch
-    epoch_final = str(datetime.timedelta(seconds=epoch_diff))
-    return epoch_final
+    epochCurrent = int(time.mktime(datetime.datetime.utcnow().timetuple()))
+    epochDifference = epochCurrent - int(time.mktime(time.strptime(twitch_api_date_parsed, "%d.%m.%Y %H:%M:%S")))
+    return str(datetime.timedelta(seconds = epochDifference))
