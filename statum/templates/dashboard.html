@@ -3,7 +3,7 @@
     <div class="streamer-area">
         <div class="area-1 area">
             <div class="title-1 title-header">
-                <h1>FOLLOWED STREAMERS</h1>
+                <h1>followed streamers.</h1>
             </div>
             <div class="data-1">
                 {% if session %}
@@ -21,17 +21,13 @@
         </div>
         <div class="area-2 area">
             <div class="title-2 title-header">
-                <h1>TOP STREAMERS</h1>
+                <h1>top streamers.</h1>
             </div>
             <div class="data-2">
                 {% if session %}
-                    {% for streamer in live_data %}
+                    {% for streamer in top_data %}
                         <div class="div-streamer">
-                            {% if live_data[streamer][0] == "NOT LIVE" %}
-                                <h1 class="streamer-box"><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> is <span class="not-live">{{live_data[streamer][0]}}</span></h1>
-                            {% else %}
-                                <h1><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> has been <span class="live">{{live_data[streamer][0]}}</span> for {{ live_data[streamer][2] }} and is currently playing {{ live_data[streamer][1] }}</h1>
-                            {% endif %}
+                            <h1><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> has been <span class="live">{{top_data[streamer][0]}}</span> for {{ top_data[streamer][2] }} and is currently playing {{ top_data[streamer][1] }}</h1>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -39,17 +35,13 @@
         </div>
         <div class="area-3 area">
             <div class="title-3 title-header">
-                <h1>TOP CATEGORIES</h1>
+                <h1>hot clips.</h1>
             </div>
             <div class="data-3">
                 {% if session %}
-                    {% for streamer in live_data %}
+                    {% for clip, url in top_clips.items() %}
                         <div class="div-streamer">
-                            {% if live_data[streamer][0] == "NOT LIVE" %}
-                                <h1 class="streamer-box"><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> is <span class="not-live">{{live_data[streamer][0]}}</span></h1>
-                            {% else %}
-                                <h1><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> has been <span class="live">{{live_data[streamer][0]}}</span> for {{ live_data[streamer][2] }} and is currently playing {{ live_data[streamer][1] }}</h1>
-                            {% endif %}
+                            <h1><a href="{{ url[0] }}" target=”_blank”>{{clip}}</a></h1>
                         </div>
                     {% endfor %}
                 {% endif %}

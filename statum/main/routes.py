@@ -20,6 +20,8 @@ def index():
 async def dashboard():
     f = furl(request.full_path) 
     streamer_data = {}
+    top_streamer_data = {}
+    clips_data = {}
 
     if session:
         streamer_list = session["user"]["follower_list"]
@@ -30,8 +32,8 @@ async def dashboard():
         header = generateToken()
         twitch_login(header)
     
-    await send_requests(streamer_data, streamer_list)
-    return render_template("dashboard.html", live_data=streamer_data, login_url=login_url)
+    await send_requests(streamer_data, streamer_list, top_streamer_data, clips_data)
+    return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, login_url=login_url)
 
 @main.route("/streamer/<streamer_name>")
 def streamer(streamer_name):
@@ -92,10 +94,20 @@ def twitch_login(header):
     User().twitchSignup(user_data_id, streamer_list)
     return streamer_list 
 
-async def send_requests(streamer_data, streamer_list):
+async def send_requests(streamer_data, streamer_list, top_streamer_data, clips_data):
     header = generateToken("bearer")
     indexStreamerData(header, streamer_list, streamer_data)
     loadStreamers(header, streamer_list, streamer_data)
+    loadTopStreamers(header, top_streamer_data)
+    loadClips(clips_data)
+
+def loadTopStreamers(header, top_streamer_data):
+    getDetails = httpx.get("https://api.twitch.tv/helix/streams", headers=header).json()
+    showTopStreamerData(top_streamer_data, getDetails['data']) 
+
+def loadClips(clips_data):
+    getDetails = httpx.get("https://www.reddit.com/r/livestreamfail/hot.json?count=20").json()
+    showTopClips(clips_data, getDetails['data']) 
 
 def loadStreamers(header, streamer_list, streamer_data):
     stream_url = "https://api.twitch.tv/helix/streams?"
@@ -114,7 +126,7 @@ def loadStreamers(header, streamer_list, streamer_data):
     for n in streamer_list:
         if n not in liveStreamers:
             notLiveStreamers.append(n)
-    
+
     showStreamerData(streamer_data, getDetailsJSON['data'], notLiveStreamers)
 
 def showStreamerData(streamer_data, getDetailsJSON, notLiveStreamers):
@@ -125,6 +137,14 @@ def showStreamerData(streamer_data, getDetailsJSON, notLiveStreamers):
         streamer_data[n] = ["NOT LIVE", "none", "none"]
 
     return streamer_data
+
+def showTopStreamerData(top_streamer_data, getDetailsJSON):
+    for n in getDetailsJSON:
+        top_streamer_data[n['user_name']] = ["LIVE", n["game_name"], epochConversion(data = n)]
+
+def showTopClips(clips_data, getDetails):
+    for n in getDetails['children']:
+        clips_data[n["data"]["title"]] = [n["data"]["url"]]
 
 async def indexStreamerData(header, streamer_list, streamer_data):
     async with httpx.AsyncClient() as client:
@@ -147,8 +167,8 @@ def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
                 System().indexStreamer(getDetailsJSON["data"][numb]["id"], getDetailsJSON["data"][numb]["broadcaster_login"])
                 if getDetailsJSON["data"][numb]["is_live"] == True:
                     streamer_data[streamer] = ["LIVE", getDetailsJSON["data"][numb]["game_name"], epochConversion(jsonData=getDetailsJSON, index=numb)]
-                # else:
-                #     streamer_data[streamer] = ["NOT LIVE", "none", "none"]
+                else:
+                    streamer_data[streamer] = ["NOT LIVE", "none", "none"]
             except parser.ParserError:
                 pass
             break
