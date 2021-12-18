@@ -8,7 +8,7 @@ import httpx, datetime, json, time
 
 main = Blueprint('main', __name__)
 
-login_url = "https://id.twitch.tv/oauth2/authorize?client_id=xhrzck2b40wioai0i2uye7319cdxuk&redirect_uri=http://localhost:5000/dashboard&response_type=code&scope=openid+user:read:email&claims={'id_token'}"
+login_url = "https://id.twitch.tv/oauth2/authorize?client_id={Config.CLIENT_ID}&redirect_uri=http://localhost:5000/dashboard&response_type=code&scope=openid+user:read:email&claims={'id_token'}"
 
 @main.route("/")
 def index():
@@ -65,12 +65,12 @@ def generateToken(*bearer):
     f = furl(request.full_path)
 
     if bearer:
-        URL = f"https://id.twitch.tv/oauth2/token?client_id=xhrzck2b40wioai0i2uye7319cdxuk&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
+        URL = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
     else:
-        URL = f"https://id.twitch.tv/oauth2/token?client_id=xhrzck2b40wioai0i2uye7319cdxuk&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=http://localhost:5000&code={f.args['code']}"
+        URL = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=http://localhost:5000&code={f.args['code']}"
     
     postedURL = httpx.post(URL).json()
-    header = {'Authorization': 'Bearer ' + postedURL["access_token"], 'Client-ID': 'xhrzck2b40wioai0i2uye7319cdxuk'}
+    header = {'Authorization': 'Bearer ' + postedURL["access_token"], 'Client-ID': Config.CLIENT_ID}
     return header
 
 def twitch_login(header):
@@ -106,7 +106,7 @@ def loadTopStreamers(header, top_streamer_data):
     showTopStreamerData(top_streamer_data, getDetails['data']) 
 
 def loadClips(clips_data):
-    getDetails = httpx.get("https://www.reddit.com/r/livestreamfail/hot.json?count=20").json()
+    getDetails = httpx.get("https://www.reddit.com/r/livestreamfail/hot.json?limit=20").json()
     showTopClips(clips_data, getDetails['data']) 
 
 def loadStreamers(header, streamer_list, streamer_data):
