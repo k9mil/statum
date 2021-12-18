@@ -212,11 +212,38 @@ a {
     white-space: nowrap;
 }
 
+/* TOS area */
+
+.tos-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 66%;
+    margin: auto
+}
+
+.tos-area h1 {
+    font-size: 24px;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.tos-area h2 {
+    font-size: 16px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tos-area p {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
 /* Footer area */
 
 .footer {
     padding: 2rem;
-    text-align: center;
     margin-top: auto;
 }
 
