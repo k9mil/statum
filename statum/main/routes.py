@@ -59,17 +59,16 @@ def load_default_data():
         json_data.close()
         return streamer_list
 
-def generateToken():
+def generateToken(*bearer):
     f = furl(request.full_path)
-    user_auth_url = f"https://id.twitch.tv/oauth2/token?client_id=xhrzck2b40wioai0i2uye7319cdxuk&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=http://localhost:5000&code={f.args['code']}"
-    post_auth = httpx.post(user_auth_url).json()
-    header = {'Authorization': 'Bearer ' + post_auth["access_token"], 'Client-ID': 'xhrzck2b40wioai0i2uye7319cdxuk'}
-    return header
-
-def generateBearer():
-    bearerGenerator = f"https://id.twitch.tv/oauth2/token?client_id=xhrzck2b40wioai0i2uye7319cdxuk&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
-    postBearer = httpx.post(bearerGenerator).json()
-    header = {'Authorization': 'Bearer ' + postBearer["access_token"], 'Client-ID': 'xhrzck2b40wioai0i2uye7319cdxuk'}
+    
+    if bearer:
+        URL = f"https://id.twitch.tv/oauth2/token?client_id=xhrzck2b40wioai0i2uye7319cdxuk&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
+    else:
+        URL = f"https://id.twitch.tv/oauth2/token?client_id=xhrzck2b40wioai0i2uye7319cdxuk&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=http://localhost:5000&code={f.args['code']}"
+    
+    postedURL = httpx.post(URL).json()
+    header = {'Authorization': 'Bearer ' + postedURL["access_token"], 'Client-ID': 'xhrzck2b40wioai0i2uye7319cdxuk'}
     return header
 
 def twitch_login(header):
@@ -94,8 +93,31 @@ def twitch_login(header):
     return streamer_list 
 
 async def send_requests(streamer_data, streamer_list):
-    header = generateBearer()
+    header = generateToken("bearer")
+    indexStreamerData(header, streamer_list, streamer_data)
+    loadStreamers(header, streamer_list, streamer_data)
 
+def tempFunc(streamer_data, getDetailsJSON, streamer_list):
+    for n in getDetailsJSON:
+        # if n['user_name'] in streamer_list:
+        streamer_data[n['user_name']] = ["LIVE", n["game_name"], tmpEpoch(n)]
+        # else:
+            #  streamer_data[n['user_name']] = ["NOT LIVE", "none", "none"]
+    return streamer_data
+
+
+def loadStreamers(header, streamer_list, streamer_data):
+    stream_url = "https://api.twitch.tv/helix/streams?"
+
+    for streamer in streamer_list:
+        stream_url += "user_login=" + streamer + "&"
+
+    getDetails = httpx.get(stream_url, headers=header)
+    getDetailsJSON = getDetails.json()
+
+    tempFunc(streamer_data, getDetailsJSON['data'], streamer_list)
+
+async def indexStreamerData(header, streamer_list, streamer_data):
     async with httpx.AsyncClient() as client:
         for streamer in streamer_list:
             streamerExists = database.twitch_streamer_data.find_one({'broadcaster_name': streamer.lower()})
@@ -108,25 +130,6 @@ async def send_requests(streamer_data, streamer_list):
                 getDetailsJSON = getDetails.json()
                 results = len(getDetailsJSON["data"])
                 indexStreamer(results, streamer_data, getDetailsJSON, streamer)
-
-    stream_url = "https://api.twitch.tv/helix/streams?"
-
-    for streamer in streamer_list:
-        stream_url += "user_login=" + streamer + "&"
-
-    getDetails = httpx.get(stream_url, headers=header)
-    getDetailsJSON = getDetails.json()
-
-    tempFunc(streamer_data, getDetailsJSON['data'], streamer_list)
-
-def tempFunc(streamer_data, getDetailsJSON, streamer_list):
-    for n in getDetailsJSON:
-        # if n['user_name'] in streamer_list:
-        streamer_data[n['user_name']] = ["LIVE", n["game_name"], tmpEpoch(n)]
-        # else:
-            #  streamer_data[n['user_name']] = ["NOT LIVE", "none", "none"]
-    return streamer_data
-
 
 def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
     for numb in range(results):
@@ -146,7 +149,7 @@ def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
 
 def temp_get_vods(streamer):
     vod_data = {}
-    header = generateBearer()
+    header = generateToken("bearer")
 
     userIDURL = f"https://api.twitch.tv/helix/users?login={streamer}"
     responseB = httpx.get(userIDURL, headers=header)

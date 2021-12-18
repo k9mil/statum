@@ -20,7 +20,7 @@ As for now, [Python](https://www.python.org/) is **necessary** for you to be abl
 
 [MongoDB](https://www.mongodb.com/) is necessary for the functionality of the web app, so some knowledge is required and MongoDB is required to be installed on your local machine.
 
-1. Open your terminal/command line where the source code for Oculus is located.
+1. Open your terminal/command line where the source code for statum is located.
 2. Install the dependencies needed via "pip install -r requirements.txt" (if that doesn't work, try pip3 instead of pip)
 3. Setup the app for flask: $env:FLASK_APP="statum"
 4. Setup the environment variables for flask: "$env:FLASK_ENV="development" (optional, debug mode)

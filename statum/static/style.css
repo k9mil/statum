@@ -78,12 +78,9 @@ body {
 
 .streamer-area {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: start;
-    height: 90%;
+    flex-direction: row;
+    justify-content: space-between;
     margin: 0 auto;
-    max-width: 49%;
 }
 
 .streamer-area .div-streamer { 
@@ -92,12 +89,32 @@ body {
     border-width: 1px;
     border-radius: .375rem;
     border-color: rgba(31,41,55);
-    margin-bottom: 1rem;
+    margin: 1rem;
 }
 
 .streamer-area .div-streamer h1 {
+    font-size: 16px;
     font-weight: 500;
     color: rgb(255, 255, 255);
+}
+
+.area {
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    min-height: 100%;
+}
+
+.area .title-header {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.title-header {
+    color: #6441a5;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 35px;
 }
 
 .live {
@@ -198,11 +215,9 @@ a {
 /* Footer area */
 
 .footer {
-    margin-top: auto;
     padding: 2rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
+    text-align: center;
+    margin-top: auto;
 }
 
 .footer a {
