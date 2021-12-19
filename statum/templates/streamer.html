@@ -1,24 +1,43 @@
 {% extends "./base/base.html" %}
 {% block top %}
-<div class="vod-top">
-    <h1 class="vod-header">Latest {{streamer}} VODs!</h1>
-</div>
-<div class="vod-results">
-    {% if vod_data %}
-        {% for n in range(20) %}
-            <a href="{{vod_data[n][1]}}" target="_blank">
-                <div class="vod-object">
-                    <div class="vod-data">
-                        <img src="{{vod_data[n][0]}}" width="200" height="200">
-                        <h1 class="time">{{vod_data[n][3]}}</h1>
-                    </div>
-                    <div class="vod-title">
-                        <h1>{{vod_data[n][2]}}</h1>
-                    </div>
-                </div>
-            </a>
-        {% endfor %}
-    {% else %}
-    {% endif %}
-</div>
+    <div class="vod-area">
+        <div class="vod-left">
+            <h1 class="vod-header title-text">xQcOW, latest vods.</h1>
+                {% if vod_data %}
+                    {% for n in range(3) %}
+                        <a href="{{vod_data[n][1]}}" target="_blank">
+                            <div class="vod-object">
+                                <div class="vod-data">
+                                    <img src="{{vod_data[n][0]}}" width="200" height="200">
+                                    <h1 class="time">{{vod_data[n][3]}}</h1>
+                                </div>
+                                <div class="vod-title">
+                                    <h1>{{vod_data[n][2]}}</h1>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    {% else %}
+                {% endif %}
+        </div>
+        <div class="vod-middle">
+            <div class="div-title">
+                <h1 class="title-text">statistics.</h1>
+            </div>
+            <div class="middle-para">
+                <p>They have streamed a total of 171 hours this month!</p>
+                <p>Averaging 483 viewers per stream.</p>
+                <p>With a total peak of 484.</p>
+                <p>With a grand total of 7,900,738 people followed.</p>
+            </div>
+        </div>
+        <div class="vod-right">
+            <div class="vod-right-top">
+                <h1>whether live or not mayb elink name game time etc look nice.</h1>
+            </div>
+            <div class="vod-right-bottom">
+                <h1>*streamer video*</h1>
+            </div>
+        </div>
+    </div>
 {% endblock %}

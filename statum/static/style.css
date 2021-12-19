@@ -98,6 +98,8 @@ body {
     color: rgb(255, 255, 255);
 }
 
+/* Dashboard Area */
+
 .area {
     display: flex;
     flex-direction: column;
@@ -108,11 +110,14 @@ body {
 .area .title-header {
     text-align: center;
     margin-top: 2rem;
+    background: -webkit-linear-gradient(45deg, #ff0000, #0400ff 75%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .title-header {
     color: #6441a5;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 16px;
     margin-bottom: 35px;
 }
@@ -132,18 +137,22 @@ a {
 
 /* Vod Results */
 
-.vod-results {
-    display: grid;
-    grid-template-columns: 33% 33% 33%;
-    grid-row-gap: 5em;
-    max-width: 75%;
-    margin: 0 auto;
-    padding-top: 100px;
+.vod-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.vod-results a {
+.vod-left {
+    display: flex;
+    flex-direction: column;
+    max-width: 33.3%;
+}
+
+.vod-left a {
     height: 240px;
     width: 426px;
+    margin-bottom: 2rem;
 }
 
 .vod-object {
@@ -163,20 +172,20 @@ a {
     overflow: hidden;
 }
 
-.vod-results .vod-object .vod-data img {
+.vod-left .vod-object .vod-data img {
     display: block;
     width: 100%;
     object-fit: cover;
 }
 
-.vod-results .vod-object .vod-data h1 {
+.vod-left .vod-object .vod-data h1 {
     color: rgb(255, 255, 255);
     font-size: 18px;
     font-weight: 500;
     overflow: hidden;
 }
 
-.vod-results .vod-object .vod-data .time {
+.vod-left .vod-object .vod-data .time {
     position: absolute;
     top: 90%;
     left: 85%;
@@ -185,6 +194,15 @@ a {
     border-radius: 3px;
     background-color: rgba(0,0,0,.7);
     border: 0 solid;
+}
+
+.vod-area .title-text {
+    font-size: 24px;
+    text-align: center;
+    margin: 2rem 0;
+    background: -webkit-linear-gradient(45deg, #ff0000, #0400ff 65%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .vod-top {
@@ -210,6 +228,27 @@ a {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+.vod-middle {
+    max-width: 33.3%;
+}
+
+.vod-middle .middle-para {
+    justify-content: center;
+}
+
+.vod-middle p {
+    color: rgb(255, 255, 255);
+    text-align: left;
+    font-size: 24px;
+    margin-bottom: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.vod-right {
+    max-width: 33.3%;
 }
 
 /* TOS area */

@@ -181,14 +181,13 @@ def temp_get_vods(streamer):
     header = generateToken("bearer")
 
     userIDURL = f"https://api.twitch.tv/helix/users?login={streamer}"
-    responseB = httpx.get(userIDURL, headers=header)
-    userID = responseB.json()["data"][0]["id"]
+    requestID = httpx.get(userIDURL, headers=header).json()["data"][0]["id"]
 
-    findVideoURL = f"https://api.twitch.tv/helix/videos?user_id={userID}&type=archive"
+    findVideoURL = f"https://api.twitch.tv/helix/videos?user_id={requestID}&type=archive"
     responseC = httpx.get(findVideoURL, headers=header)
 
     try:
-        for n in range(20):
+        for n in range(3):
             thumbnail_url = responseC.json()["data"][n]["thumbnail_url"]
             vod_url = responseC.json()["data"][n]["url"]
             title = responseC.json()["data"][n]["title"]
@@ -201,6 +200,7 @@ def temp_get_vods(streamer):
     except IndexError:
         pass
     
+    print(vod_data)
     return vod_data
 
 def epochConversion(**kwargs):
