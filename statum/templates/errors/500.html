@@ -1,10 +1,21 @@
 {% extends "./base/error_base.html" %}
 {% block top %}
-    <div class="top-area">
-        <div class="top-header">
-            <h2 class="header-text">Not sure how you got here. Server error. Try later :(</h2>
-            <br>
-            <a href="{{ url_for('main.index') }}">click here uwu</a>
+    <div class="error__area">
+        <div class="error__image">
+            <img src="{{ url_for('static', filename='/img/500__error.svg') }}" alt="">
+        </div>
+        <div class="error__text">
+            <div class="error__upper">
+                <h1>Internal Server Error</h1>
+                <p>Unexpected error. We are currently working on fixing the problem!</p>
+            </div>
+            <div class="error__lower">
+                <h2>Here are some helpful links instead:</h2>
+                <ul>
+                    <li><a href="{{ url_for('main.dashboard') }}">Home</a></li>
+                    <li><a href="{{ url_for('main.about') }}">About Us</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}

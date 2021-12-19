@@ -1,10 +1,21 @@
 {% extends "./base/error_base.html" %}
 {% block top %}
-    <div class="top-area">
-        <div class="top-header">
-            <h2 class="header-text">Oh no! This page... does not exist! Be careful :(</h2>
-            <br>
-            <a href="{{ url_for('main.index') }}">click here uwu</a>
+    <div class="error__area">
+        <div class="error__image">
+            <img src="{{ url_for('static', filename='/img/404__error.svg') }}" alt="">
+        </div>
+        <div class="error__text">
+            <div class="error__upper">
+                <h1>Oops!</h1>
+                <p>We can't seem to find the page you are looking for :(</p>
+            </div>
+            <div class="error__lower">
+                <h2>Here are some helpful links instead:</h2>
+                <ul>
+                    <li><a href="{{ url_for('main.dashboard') }}">Home</a></li>
+                    <li><a href="{{ url_for('main.about') }}">About Us</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}

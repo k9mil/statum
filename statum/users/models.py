@@ -37,3 +37,4 @@ class System:
         else:
             database.twitch_streamer_data.insert_one(broadcaster)
             return 1
+        return 1
