@@ -59,6 +59,10 @@ def privacy():
 def terms_of_service():
     return render_template("tos.html", login_url=login_url)
 
+@main.route("/random")
+def random():
+    return render_template("random.html")
+
 def load_default_data():
     with open("statum\static\streamers.json", "r") as json_data:
         streamer_list = json.load(json_data)
