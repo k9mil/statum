@@ -22,11 +22,14 @@ As for now, [Python](https://www.python.org/) is **necessary** for you to be abl
 
 [MongoDB](https://www.mongodb.com/) is necessary for the functionality of the web app, so some knowledge is required and MongoDB is required to be installed on your local machine.
 
-1. Open your terminal/command line where the source code for statum is located.
-2. Install the dependencies needed via "pip install -r requirements.txt" (if that doesn't work, try pip3 instead of pip)
-3. Setup the app for flask: $env:FLASK_APP="statum"
-4. Setup the environment variables for flask: "$env:FLASK_ENV="development" (optional, debug mode)
-5. Run the flask web app via "flask run". 
+1. To host this web app, you need to register a [Twitch](https://dev.twitch.tv/console/apps/create) Application which will server as the basis of this program.
+2. After you have registered the Twitch Application, you have to click "Manage" and locate the "CLIENT ID" which you can paste in the config.py file.
+3. Generate an OAuth token, after that, you have to put that in the config.py file aswell.
+4. Open your terminal/command line where the source code for statum is located.
+5. Install the dependencies needed via "pip install -r requirements.txt" (if that doesn't work, try pip3 instead of pip)
+6. Setup the app for flask: $env:FLASK_APP="statum"
+7. Setup the environment variables for flask: "$env:FLASK_ENV="development" (optional, debug mode)
+8. Run the flask web app via "flask run". 
 
 After that, you're set.
 
@@ -36,7 +39,7 @@ Below you can see a few screenshots from the current UI, though subject to chang
 
 Home Page             |  Dashboard
 :-------------------------:|:-------------------------:
-![Home Page](https://i.imgur.com/NqqKMH1.jpg)  |  ![Dashboard](https://i.imgur.com/CIq7wUa.jpg)
+![Home Page](https://i.imgur.com/NqqKMH1.jpg)  |  ![Dashboard](https://i.imgur.com/133Zojj.jpg)
 
 ## Contributing 🤠
 
