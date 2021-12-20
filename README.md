@@ -4,10 +4,12 @@ statum, a small side project, is a web app built in Flask which servers as a too
 
 ## Features 😂
 
-- Incorporated Twitch API which allows for your followers to be loaded instantaneously.
+- Incorporated Twitch OAuth which allows for your followers to be loaded instantaneously.
 - List of VODs for each streamer.
 - Displays whether the streamer is live.
 - If the streamer is live, it displays the category they are in & length of stream.
+- Displays a list of top streamers of the platform.
+- List of the current most popular twitch clips, alongside with their metrics.
 - Utilization of MongoDB for indexing streamers to minimize the amount of requests & user sessions.
 
 ## Working on 🦸‍♂️
@@ -16,7 +18,7 @@ The backlog of the features yet to be implemented are available on a public Trel
 
 ## Installation process 🤓
 
-As for now, [Python](https://www.python.org/) is **necessary** for you to be able to run this script.
+As for now, [Python](https://www.python.org/) is **necessary** for you to be able to run this web application.
 
 [MongoDB](https://www.mongodb.com/) is necessary for the functionality of the web app, so some knowledge is required and MongoDB is required to be installed on your local machine.
 
