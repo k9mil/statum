@@ -111,9 +111,6 @@ body {
 .area .title-header {
     text-align: center;
     margin-top: 2rem;
-    background: -webkit-linear-gradient(45deg, #ff0000, #ffffff 75%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .clip-area {
@@ -224,9 +221,6 @@ a {
     font-size: 24px;
     text-align: center;
     margin: 2rem 0;
-    background: -webkit-linear-gradient(45deg, #ff0000, #0400ff 65%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .vod-top {
@@ -400,4 +394,12 @@ a {
 .error__lower li:hover {
     color: rgb(255, 255, 255);
     cursor: pointer;
+}
+
+/* Other */
+
+.gradient-color {
+    background: -webkit-linear-gradient(45deg, #ff0000, #ffffff 75%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }

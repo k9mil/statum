@@ -39,7 +39,7 @@ Below you can see a few screenshots from the current UI, though subject to chang
 
 Home Page             |  Dashboard
 :-------------------------:|:-------------------------:
-![Home Page](https://i.imgur.com/NqqKMH1.jpg)  |  ![Dashboard](https://i.imgur.com/133Zojj.jpg)
+![Home Page](https://i.imgur.com/NqqKMH1.jpg)  |  ![Dashboard](https://i.imgur.com/SVqe6y2.jpg)
 
 ## Contributing 🤠
 
