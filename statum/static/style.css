@@ -131,6 +131,12 @@ body {
     font-size: 16px;
 }
 
+.icons img {
+    width: 24px;
+    height: 24px;
+    margin-right: 1rem;
+}
+
 .live {
     color: green;
 }
@@ -146,7 +152,16 @@ a {
 
 /* Vod Results */
 
-.vod-area {
+.vod-results {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-row-gap: 5em;
+    max-width: 75%;
+    margin: 0 auto;
+    padding-top: 100px;
+}
+
+/* .vod-area {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -156,9 +171,9 @@ a {
     display: flex;
     flex-direction: column;
     max-width: 33.3%;
-}
+} */
 
-.vod-left a {
+.vod-results a {
     height: 240px;
     width: 426px;
     margin-bottom: 2rem;
@@ -181,20 +196,20 @@ a {
     overflow: hidden;
 }
 
-.vod-left .vod-object .vod-data img {
+.vod-results .vod-object .vod-data img {
     display: block;
     width: 100%;
     object-fit: cover;
 }
 
-.vod-left .vod-object .vod-data h1 {
+.vod-results .vod-object .vod-data h1 {
     color: rgb(255, 255, 255);
     font-size: 18px;
     font-weight: 500;
     overflow: hidden;
 }
 
-.vod-left .vod-object .vod-data .time {
+.vod-results .vod-object .vod-data .time {
     position: absolute;
     top: 90%;
     left: 85%;

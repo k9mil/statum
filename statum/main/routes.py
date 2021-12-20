@@ -35,13 +35,17 @@ async def dashboard():
     await send_requests(streamer_data, streamer_list, top_streamer_data, clips_data)
     return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, login_url=login_url)
 
+@main.route("/vod/<streamer_name>")
+def vod(streamer_name):
+    vod_data = getVOD(streamer_name)
+    if len(vod_data) > 1:
+        return render_template("vod.html", vod_data=vod_data, streamer=streamer_name)
+    else:
+        return render_template("vod.html", streamer=streamer_name)
+
 @main.route("/streamer/<streamer_name>")
 def streamer(streamer_name):
-    vod_data = temp_get_vods(streamer_name)
-    if len(vod_data) > 1:
-        return render_template("streamer.html", vod_data=vod_data, streamer=streamer_name)
-    else:
-        return render_template("streamer.html", streamer=streamer_name)
+    return render_template("streamer.html", streamer=streamer_name)
 
 @main.route("/about")
 def about():
@@ -177,7 +181,7 @@ def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
             pass
     return streamer_data
 
-def temp_get_vods(streamer):
+def getVOD(streamer):
     vod_data = {}
     header = generateToken("bearer")
 
@@ -188,7 +192,7 @@ def temp_get_vods(streamer):
     responseC = httpx.get(findVideoURL, headers=header)
 
     try:
-        for n in range(3):
+        for n in range(20):
             thumbnail_url = responseC.json()["data"][n]["thumbnail_url"]
             vod_url = responseC.json()["data"][n]["url"]
             title = responseC.json()["data"][n]["title"]

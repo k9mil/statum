@@ -14,6 +14,12 @@
                             {% else %}
                                 <h1><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> has been <span class="live">{{live_data[streamer][0]}}</span> for {{ live_data[streamer][2] }} and is currently playing {{ live_data[streamer][1] }}</h1>
                             {% endif %}
+                                <div class="clip-area">
+                                    <div class="clip-likes icons">
+                                        <a href="{{ url_for('main.vod', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/tv.svg') }}" alt=""></a>
+                                        <a href="https://twitch.tv/{{ streamer }}" target="_blank"><img src="{{ url_for('static', filename='/img/external-link.svg') }}" alt=""></a>
+                                    </div>
+                                </div>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -28,6 +34,12 @@
                     {% for streamer in top_data %}
                         <div class="div-streamer">
                             <h1><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> has been <span class="live">{{top_data[streamer][0]}}</span> for {{ top_data[streamer][2] }} and is currently playing {{ top_data[streamer][1] }}</h1>
+                            <div class="clip-area">
+                                <div class="clip-likes icons">
+                                    <a href="{{ url_for('main.vod', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/tv.svg') }}" alt=""></a>
+                                    <a href="https://twitch.tv/{{ streamer }}" target="_blank"><img src="{{ url_for('static', filename='/img/external-link.svg') }}" alt=""></a>
+                                </div>
+                            </div>
                         </div>
                     {% endfor %}
                 {% endif %}

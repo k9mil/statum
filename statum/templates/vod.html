@@ -1,0 +1,24 @@
+{% extends "./base/base.html" %}
+{% block top %}
+    <div class="vod-top">
+        <h1 class="vod-header">Latest {{streamer}} VODs!</h1>
+    </div>
+    <div class="vod-results">
+        {% if vod_data %}
+            {% for n in range(20) %}
+                <a href="{{vod_data[n][1]}}" target="_blank">
+                    <div class="vod-object">
+                        <div class="vod-data">
+                            <img src="{{vod_data[n][0]}}" width="200" height="200">
+                            <h1 class="time">{{vod_data[n][3]}}</h1>
+                        </div>
+                        <div class="vod-title">
+                            <h1>{{vod_data[n][2]}}</h1>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+        {% endif %}
+    </div>
+{% endblock %}
