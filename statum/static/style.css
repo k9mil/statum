@@ -111,7 +111,9 @@ body {
 }
 
 .title-header {
-    color: #6441a5;
+    background: -webkit-linear-gradient(45deg, #ff0000, #ffffff 75%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-weight: 500;
     font-size: 16px;
     margin-bottom: 35px;
