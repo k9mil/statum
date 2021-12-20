@@ -103,6 +103,7 @@ body {
 .area {
     display: flex;
     flex-direction: column;
+    flex: 1 1 0px;
     justify-content: top;
     min-height: 100%;
 }
@@ -113,6 +114,21 @@ body {
     background: -webkit-linear-gradient(45deg, #ff0000, #ffffff 75%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.clip-area {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1.5rem;
+    justify-content: flex-start;
+}
+
+.clip-area .clip-comments {
+    margin-right: 2rem;
+}
+
+.clip-area h2 {
+    font-size: 16px;
 }
 
 .live {

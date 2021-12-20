@@ -41,7 +41,17 @@
                 {% if session %}
                     {% for clip, url in top_clips.items() %}
                         <div class="div-streamer">
-                            <h1><a href="{{ url[0] }}" target=”_blank”>{{clip}}</a></h1>
+                            <h1><a href="{{ 'reddit.com'.join(['https://', url[0]]) }}" target=”_blank”>{{clip}}</a></h1>
+                            <div class="clip-area">
+                                <div class="clip-comments">
+                                    <img src="{{ url_for('static', filename='/img/message-square.svg') }}" alt="">
+                                    <h2>{{ url[2] }}</h2>
+                                </div>
+                                <div class="clip-likes">
+                                    <img src="{{ url_for('static', filename='/img/thumbs-up.svg') }}" alt="">
+                                    <h2>{{ url[1] }}</h2>
+                                </div>
+                            </div>
                         </div>
                     {% endfor %}
                 {% endif %}

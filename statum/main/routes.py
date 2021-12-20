@@ -144,7 +144,8 @@ def showTopStreamerData(top_streamer_data, getDetailsJSON):
 
 def showTopClips(clips_data, getDetails):
     for n in getDetails['children']:
-        clips_data[n["data"]["title"]] = [n["data"]["url"]]
+        clips_data[n["data"]["title"]] = [n["data"]["permalink"], n["data"]["score"], n["data"]["num_comments"]]
+    print(clips_data)
 
 async def indexStreamerData(header, streamer_list, streamer_data):
     async with httpx.AsyncClient() as client:
@@ -200,7 +201,6 @@ def temp_get_vods(streamer):
     except IndexError:
         pass
     
-    print(vod_data)
     return vod_data
 
 def epochConversion(**kwargs):
