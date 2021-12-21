@@ -4,11 +4,11 @@ from dateutil import parser
 from furl import furl
 from statum.users.models import User, System
 from statum import database
-import httpx, datetime, json, time
+import httpx, datetime, json, time, random
 
 main = Blueprint('main', __name__)
 
-login_url = "https://id.twitch.tv/oauth2/authorize?client_id={Config.CLIENT_ID}&redirect_uri=http://localhost:5000/dashboard&response_type=code&scope=openid+user:read:email&claims={'id_token'}"
+login_url = f"https://id.twitch.tv/oauth2/authorize?client_id={Config.CLIENT_ID}&redirect_uri=http://localhost:5000/dashboard&response_type=code&scope=openid+user:read:email&claims={'id_token'}"
 
 @main.route("/")
 def index():
@@ -60,14 +60,54 @@ def terms_of_service():
     return render_template("tos.html", login_url=login_url)
 
 @main.route("/random")
-def random():
-    return render_template("random.html")
+def randomHTML():
+    user_name = randomStream()
+    return render_template("random.html", user_name = user_name)
 
 def load_default_data():
     with open("statum\static\streamers.json", "r") as json_data:
         streamer_list = json.load(json_data)
         json_data.close()
         return streamer_list
+
+def randomStream():
+    MAX_VIEWERS = 500
+    MIN_VIEWERS = 350
+    request_status = True
+    streamerIDs = []
+
+    header = generateToken("bearer")
+    usersFollowedURL = "https://api.twitch.tv/helix/streams"
+    getStreamsRequest = httpx.get(usersFollowedURL, headers=header).json()
+
+    while request_status != False:
+        usersFollowedURL = f"https://api.twitch.tv/helix/streams?first=100&after={getStreamsRequest['pagination']['cursor']}"
+        getStreamsRequest = httpx.get(usersFollowedURL, headers=header).json()
+
+        if (getStreamsRequest['data'][0]['viewer_count'] < MAX_VIEWERS):
+            indexRandom(getStreamsRequest, streamerIDs)
+
+        if (getStreamsRequest['data'][50]['viewer_count'] < MIN_VIEWERS):
+            request_status = False
+        else: 
+            pass
+
+    print(streamerIDs)
+    print(len(streamerIDs))
+
+    randomStreamer = chooseRandom(streamerIDs)
+    print(randomStreamer)
+    return randomStreamer
+
+def indexRandom(getStreamsRequest, streamerIDs):
+    requestInstances = len(getStreamsRequest["data"])
+    for i in range(requestInstances):
+        streamerIDs.append(getStreamsRequest['data'][i]['user_name'])
+    
+    return streamerIDs
+
+def chooseRandom(streamerIDs):
+    return random.choice(streamerIDs)
 
 def generateToken(*bearer):
     f = furl(request.full_path)
@@ -153,7 +193,6 @@ def showTopStreamerData(top_streamer_data, getDetailsJSON):
 def showTopClips(clips_data, getDetails):
     for n in getDetails['children']:
         clips_data[n["data"]["title"]] = [n["data"]["permalink"], n["data"]["score"], n["data"]["num_comments"]]
-    print(clips_data)
 
 async def indexStreamerData(header, streamer_list, streamer_data):
     async with httpx.AsyncClient() as client:

@@ -269,6 +269,18 @@ a {
     max-width: 33.3%;
 }
 
+/* Random Area */
+
+.random-area {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 0px;
+}
+
+.random-area .random-left {
+    
+}
+
 /* TOS area */
 
 .tos-area {
