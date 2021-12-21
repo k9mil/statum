@@ -2,14 +2,14 @@
 {% block top %}
     <div class="random-area">
         <div class="random-left">
-            <h2>embed</h2>
+            <iframe src="https://player.twitch.tv/?channel={{ user_name }}&parent=localhost" frameborder="0" allowfullscreen="true" scrolling="no" height="360" width="640"></iframe>
         </div>
         <div class="random-right">
-            <h1>u just started watching ...'s stream.</h1>
-            <h2>supporting small streamers is importanto</h2>
-            <h2>further text</h2>
-            <h2>however if you wish to skip to find another streamer which suits your needs</h2>
-            <h2>click here</h2>
+            <h2>You have just started watching <a href="https://twitch.tv/{{ user_name }}" class="gradient-color">{{ user_name }}'s</a> stream.</h2>
+            <h2>Supporting smaller content creators is important.</h2>
+            <h2>If you enjoy the stream, make sure to drop them a follow!</h2>
+            <h2>However, if you wish to skip to find another streamer which suits your needs click the button below.</h2>
+            <a href="{{ url_for('main.randomHTML')}}"><h2>NEXT</h2></a>
         </div>
     </div>
 {% endblock %}

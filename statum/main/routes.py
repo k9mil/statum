@@ -71,8 +71,8 @@ def load_default_data():
         return streamer_list
 
 def randomStream():
-    MAX_VIEWERS = 500
-    MIN_VIEWERS = 350
+    MAX_VIEWERS = 5000
+    MIN_VIEWERS = 3500
     request_status = True
     streamerIDs = []
 
