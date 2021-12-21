@@ -305,6 +305,27 @@ a {
     color: #6441a5;
 } */
 
+/* Individual Streamer Area */
+
+.individual-streamer-area {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 0px;
+}
+
+.individual-streamer-area-left,
+.individual-streamer-area-middle,
+.individual-streamer-area-right {
+    display: flex;
+    flex-direction: column;
+    width: 33.3%;
+}
+
+.individual-streamer-area-right h1 {
+    font-size: 24px;
+}
+
+
 /* TOS area */
 
 .tos-area {
@@ -436,6 +457,12 @@ a {
 
 .gradient-color {
     background: -webkit-linear-gradient(45deg, #ff0000, #ffffff 75%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-color-2 {
+    background: -webkit-linear-gradient(45deg, #ff0000, #ffffff 35%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }

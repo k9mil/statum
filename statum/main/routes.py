@@ -51,7 +51,9 @@ def vod(streamer_name):
 
 @main.route("/streamer/<streamer_name>")
 def streamer(streamer_name):
-    return render_template("streamer.html", streamer=streamer_name)
+    header = generateToken("bearer")
+    top_clips = getClips(header, getStreamerID(header, streamer_name))
+    return render_template("streamer.html", streamer=streamer_name, top_clips=top_clips)
 
 @main.route("/about")
 def about():
@@ -285,6 +287,21 @@ def getVOD(streamer):
         pass
     
     return vod_data
+
+def getStreamerID(header, streamerUsername):
+    getDetails = httpx.get(f"https://api.twitch.tv/helix/users?login={streamerUsername}", headers=header).json()
+    return getDetails["data"][0]["id"]
+
+def getClips(header, bID):
+    clipDict = {}
+    getDetails = httpx.get(f"https://api.twitch.tv/helix/clips?broadcaster_id={bID}&first=3", headers=header).json()
+
+    for i in getDetails['data']:
+        clipDict[i['url']] = [i['view_count'], i['duration'], i['title'], i['created_at']]
+
+    print(clipDict)
+    return clipDict
+
 
 def epochConversion(**kwargs):
     if not kwargs['data']:
