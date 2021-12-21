@@ -4,7 +4,8 @@ from dateutil import parser
 from furl import furl
 from statum.users.models import User, System
 from statum import database, scheduler, create_app
-import httpx, datetime, json, time, random
+from bs4 import BeautifulSoup
+import httpx, datetime, json, time, random, lxml
 
 main = Blueprint('main', __name__)
 
@@ -53,8 +54,8 @@ def vod(streamer_name):
 def streamer(streamer_name):
     header = generateToken("bearer")
     top_clips = getClips(header, getStreamerID(header, streamer_name))
-    faq_data = getData(header, streamer_name)
-    bans_data = getBans(header, streamer_name)
+    faq_data = getData(streamer_name)
+    ban_data = getBans(streamer_name)
     return render_template("streamer.html", streamer=streamer_name, top_clips=top_clips, faq_data=faq_data, ban_data=ban_data)
 
 @main.route("/about")
@@ -301,18 +302,29 @@ def getClips(header, bID):
     for i in getDetails['data']:
         clipDict[i['url']] = [i['view_count'], i['duration'], i['title'], i['created_at']]
 
-    print(clipDict)
     return clipDict
 
-def getData(header, streamer):
+def getData(streamer):
     streamerDict = {}
     getDetails = httpx.get(f"https://twitchtracker.com/api/channels/summary/{streamer}", headers={'User-Agent': 'Chrome'}).json()
     streamerDict[streamer] = [getDetails['rank'], getDetails['avg_viewers'], getDetails['max_viewers'], getDetails['followers'], getDetails['followers_total']]
 
     return streamerDict
 
-def getBans(header, streamer):
-    print("a)")
+def getBans(streamer):
+    bansDict = {}
+    banInformation = []
+    getDetails = httpx.get(f"https://streamerbans.com/user/{streamer}").text
+
+    bs4Obj = BeautifulSoup(getDetails, 'lxml')
+    totalBans = bs4Obj.find_all("dd", {"class": "text-3xl"})
+
+    for n in totalBans:
+        banInformation.append(n.text)
+
+    bansDict[streamer] = banInformation
+
+    return bansDict
 
 def epochConversion(**kwargs):
     if not kwargs['data']:
