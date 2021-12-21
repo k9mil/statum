@@ -56,6 +56,11 @@ def streamer(streamer_name):
     top_clips = getClips(header, getStreamerID(header, streamer_name))
     faq_data = getData(streamer_name)
     ban_data = getBans(streamer_name)
+
+    print(top_clips)
+    print(faq_data)
+    print(ban_data)
+
     return render_template("streamer.html", streamer=streamer_name, top_clips=top_clips, faq_data=faq_data, ban_data=ban_data)
 
 @main.route("/about")
@@ -307,7 +312,7 @@ def getClips(header, bID):
 def getData(streamer):
     streamerDict = {}
     getDetails = httpx.get(f"https://twitchtracker.com/api/channels/summary/{streamer}", headers={'User-Agent': 'Chrome'}).json()
-    streamerDict[streamer] = [getDetails['rank'], getDetails['avg_viewers'], getDetails['max_viewers'], getDetails['followers'], getDetails['followers_total']]
+    streamerDict[streamer] = [getDetails['rank'], getDetails['avg_viewers'], getDetails['max_viewers'], getDetails['followers'], getDetails['followers_total'], getDetails['views_total']]
 
     return streamerDict
 

@@ -325,6 +325,34 @@ a {
     font-size: 24px;
 }
 
+.isa-faq-header,
+.isa-bans-header,
+.isa-clips-header {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.data-point {
+    padding: 2rem;
+    border: 0 solid;
+    border-width: 1px;
+    border-radius: .375rem;
+    border-color: rgba(31,41,55);
+    margin: 2.5rem;
+}
+
+.data-point h1 {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+}
+
+.data-point h2 {
+    font-size: 14px;
+    font-weight: normal;
+    margin-top: 2rem;
+    line-height: 1.5rem;
+    color: rgb(190, 190, 200)
+}
 
 /* TOS area */
 
