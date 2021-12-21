@@ -53,7 +53,9 @@ def vod(streamer_name):
 def streamer(streamer_name):
     header = generateToken("bearer")
     top_clips = getClips(header, getStreamerID(header, streamer_name))
-    return render_template("streamer.html", streamer=streamer_name, top_clips=top_clips)
+    faq_data = getData(header, streamer_name)
+    bans_data = getBans(header, streamer_name)
+    return render_template("streamer.html", streamer=streamer_name, top_clips=top_clips, faq_data=faq_data, ban_data=ban_data)
 
 @main.route("/about")
 def about():
@@ -302,6 +304,15 @@ def getClips(header, bID):
     print(clipDict)
     return clipDict
 
+def getData(header, streamer):
+    streamerDict = {}
+    getDetails = httpx.get(f"https://twitchtracker.com/api/channels/summary/{streamer}", headers={'User-Agent': 'Chrome'}).json()
+    streamerDict[streamer] = [getDetails['rank'], getDetails['avg_viewers'], getDetails['max_viewers'], getDetails['followers'], getDetails['followers_total']]
+
+    return streamerDict
+
+def getBans(header, streamer):
+    print("a)")
 
 def epochConversion(**kwargs):
     if not kwargs['data']:
