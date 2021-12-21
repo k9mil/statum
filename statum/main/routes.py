@@ -3,7 +3,7 @@ from statum.config import Config
 from dateutil import parser
 from furl import furl
 from statum.users.models import User, System
-from statum import database
+from statum import database, scheduler, create_app
 import httpx, datetime, json, time, random
 
 main = Blueprint('main', __name__)
@@ -57,11 +57,21 @@ def privacy():
     
 @main.route("/tos")
 def terms_of_service():
+    database.random_streamer_data.remove()
     return render_template("tos.html", login_url=login_url)
 
 @main.route("/random")
 def randomHTML():
-    user_name = randomStream()
+    randomData = System.loadRandom()
+
+    try:
+        if randomData['streamers']:
+            user_name = randomIndexedStream(randomData['streamers'])
+        else:
+            user_name = randomStream()
+    except TypeError:
+        user_name = randomStream()
+
     return render_template("random.html", user_name = user_name)
 
 def load_default_data():
@@ -70,9 +80,19 @@ def load_default_data():
         json_data.close()
         return streamer_list
 
+def randomIndexedStream(streamers):
+    return random.choice(streamers)
+
+@scheduler.task('interval', id='periodicIndexClearence', seconds=300, misfire_grace_time=360)
+def periodicIndexClearence():
+    database.random_streamer_data.remove()
+    app = create_app()
+    with app.test_request_context():
+        randomStream()
+
 def randomStream():
-    MAX_VIEWERS = 5000
-    MIN_VIEWERS = 3500
+    MAX_VIEWERS = 100
+    MIN_VIEWERS = 10
     request_status = True
     streamerIDs = []
 
@@ -83,20 +103,18 @@ def randomStream():
     while request_status != False:
         usersFollowedURL = f"https://api.twitch.tv/helix/streams?first=100&after={getStreamsRequest['pagination']['cursor']}"
         getStreamsRequest = httpx.get(usersFollowedURL, headers=header).json()
+        requestInstances = (len(getStreamsRequest["data"]) - 1)
 
         if (getStreamsRequest['data'][0]['viewer_count'] < MAX_VIEWERS):
             indexRandom(getStreamsRequest, streamerIDs)
 
-        if (getStreamsRequest['data'][50]['viewer_count'] < MIN_VIEWERS):
+        if (getStreamsRequest['data'][requestInstances]['viewer_count'] < MIN_VIEWERS):
             request_status = False
         else: 
             pass
 
-    print(streamerIDs)
-    print(len(streamerIDs))
-
+    System.indexRandomDB(streamerIDs)
     randomStreamer = chooseRandom(streamerIDs)
-    print(randomStreamer)
     return randomStreamer
 
 def indexRandom(getStreamsRequest, streamerIDs):

@@ -293,13 +293,17 @@ a {
     margin-bottom: 1rem;
 }
 
-.random-area .random-right h2:last-child {
+.random-area .random-right img {
+    margin-top: 5rem;
+}
+
+/* .random-area .random-right h2:last-child {
     margin-top: 5rem;
 }
 
 .random-area .random-right h2:last-child:hover {
     color: #6441a5;
-}
+} */
 
 /* TOS area */
 

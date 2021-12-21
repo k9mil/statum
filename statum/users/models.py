@@ -38,3 +38,20 @@ class System:
             database.twitch_streamer_data.insert_one(broadcaster)
             return 1
         return 1
+
+    def indexRandomDB(streamerIDs):
+        streams = {
+            "_id": 1,
+            "streamers": streamerIDs
+        }
+
+        if database.random_streamer_data.count_documents({'_id': 1}) != 0:
+            pass
+        else:
+            database.random_streamer_data.insert_one(streams)
+
+    def loadRandom():
+        if database.random_streamer_data.count() != 0:
+            return database["random_streamer_data"].find_one()
+        else:
+            pass
