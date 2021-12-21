@@ -25,21 +25,27 @@ async def dashboard():
 
     if session:
         streamer_list = session["user"]["follower_list"]
-    else:
-        streamer_list = load_default_data()
+    # else:
+        # streamer_list = load_default_data()
 
     if f.args:
         header = generateToken()
         twitch_login(header)
+        return redirect(url_for("main.dashboard"))
     
-    await send_requests(streamer_data, streamer_list, top_streamer_data, clips_data)
+    try:
+        await send_requests(streamer_data, streamer_list, top_streamer_data, clips_data)
+    except UnboundLocalError:
+         return redirect(url_for("main.index"))
+
     return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, login_url=login_url)
 
 @main.route("/vod/<streamer_name>")
 def vod(streamer_name):
     vod_data = getVOD(streamer_name)
-    if len(vod_data) > 1:
-        return render_template("vod.html", vod_data=vod_data, streamer=streamer_name)
+    vodLength = len(vod_data)
+    if vodLength > 1:
+        return render_template("vod.html", vod_data=vod_data, streamer=streamer_name, vodLength = vodLength)
     else:
         return render_template("vod.html", streamer=streamer_name)
 
@@ -120,7 +126,10 @@ def randomStream():
 def indexRandom(getStreamsRequest, streamerIDs):
     requestInstances = len(getStreamsRequest["data"])
     for i in range(requestInstances):
-        streamerIDs.append(getStreamsRequest['data'][i]['user_name'])
+        if getStreamsRequest['data'][i]['user_name'].isascii():
+            streamerIDs.append(getStreamsRequest['data'][i]['user_name'])
+        else:
+            streamerIDs.append(getStreamsRequest['data'][i]['user_login'])
     
     return streamerIDs
 
@@ -187,7 +196,10 @@ def loadStreamers(header, streamer_list, streamer_data):
     getDetailsJSON = getDetails.json()
 
     for n in getDetailsJSON['data']:
-        liveStreamers.append(n['user_name'])
+        if n['user_name'].isascii():
+            liveStreamers.append(n['user_name'])
+        else:
+            liveStreamers.append(n['user_login'])
     
     for n in streamer_list:
         if n not in liveStreamers:
@@ -197,7 +209,10 @@ def loadStreamers(header, streamer_list, streamer_data):
 
 def showStreamerData(streamer_data, getDetailsJSON, notLiveStreamers):
     for n in getDetailsJSON:
-        streamer_data[n['user_name']] = ["LIVE", n["game_name"], epochConversion(data = n)]
+        if n['user_name'].isascii():
+            streamer_data[n['user_name']] = ["LIVE", n["game_name"], epochConversion(data = n)]
+        else:
+            streamer_data[n['user_login']] = ["LIVE", n["game_name"], epochConversion(data = n)]
 
     for n in notLiveStreamers:
         streamer_data[n] = ["NOT LIVE", "none", "none"]
@@ -206,7 +221,10 @@ def showStreamerData(streamer_data, getDetailsJSON, notLiveStreamers):
 
 def showTopStreamerData(top_streamer_data, getDetailsJSON):
     for n in getDetailsJSON:
-        top_streamer_data[n['user_name']] = ["LIVE", n["game_name"], epochConversion(data = n)]
+        if n['user_name'].isascii():
+            top_streamer_data[n['user_name']] = ["LIVE", n["game_name"], epochConversion(data = n)]
+        else:
+            top_streamer_data[n['user_login']] = ["LIVE", n["game_name"], epochConversion(data = n)]
 
 def showTopClips(clips_data, getDetails):
     for n in getDetails['children']:
