@@ -55,7 +55,21 @@
                 <h1 class="gradient-color">popular clips.</h1>
             </div>
             <div class="isa-clips">
-                
+                {% if top_clips %}
+                    {% for n in range(clip_length) %}
+                        <a href="{{ top_clips[n][4] }}" target="_blank">
+                            <div class="vod-object isa-clip-object">
+                                <div class="vod-data">
+                                    <img src="{{top_clips[n][5] }}" width="200" height="200">
+                                    <h1 class="time">{{ top_clips[n][1] }}s</h1>
+                                </div>
+                                <div class="vod-title">
+                                    <h1>{{ top_clips[n][2] }}</h1>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>

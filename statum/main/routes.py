@@ -56,12 +56,11 @@ def streamer(streamer_name):
     top_clips = getClips(header, getStreamerID(header, streamer_name))
     faq_data = getData(streamer_name)
     ban_data = getBans(streamer_name)
+    clip_length = len(top_clips)
 
     print(top_clips)
-    print(faq_data)
-    print(ban_data)
 
-    return render_template("streamer.html", streamer=streamer_name, top_clips=top_clips, faq_data=faq_data, ban_data=ban_data)
+    return render_template("streamer.html", streamer=streamer_name, top_clips=top_clips, faq_data=faq_data, ban_data=ban_data, clip_length=clip_length)
 
 @main.route("/about")
 def about():
@@ -301,13 +300,13 @@ def getStreamerID(header, streamerUsername):
     return getDetails["data"][0]["id"]
 
 def getClips(header, bID):
-    clipDict = {}
+    clipList = []
     getDetails = httpx.get(f"https://api.twitch.tv/helix/clips?broadcaster_id={bID}&first=3", headers=header).json()
 
     for i in getDetails['data']:
-        clipDict[i['url']] = [i['view_count'], i['duration'], i['title'], i['created_at']]
-
-    return clipDict
+        clipList.append([i['view_count'], i['duration'], i['title'], i['created_at'], i['url'], i['thumbnail_url']])
+    
+    return clipList
 
 def getData(streamer):
     streamerDict = {}
