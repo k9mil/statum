@@ -119,13 +119,16 @@ def randomStream():
         requestInstances = (len(getStreamsRequest["data"]) - 1)
 
         if (getStreamsRequest['data'][0]['viewer_count'] < MAX_VIEWERS):
+            print('a')
             indexRandom(getStreamsRequest, streamerIDs)
 
         if (getStreamsRequest['data'][requestInstances]['viewer_count'] < MIN_VIEWERS):
+            print('b')
             request_status = False
         else: 
             pass
-
+    
+    print(getStreamsRequest)
     System.indexRandomDB(streamerIDs)
     randomStreamer = chooseRandom(streamerIDs)
     return randomStreamer
@@ -299,11 +302,19 @@ def getVOD(streamer):
 
 def getStreamerID(header, streamerUsername):
     getDetails = httpx.get(f"https://api.twitch.tv/helix/users?login={streamerUsername}", headers=header).json()
-    return getDetails["data"][0]["id"]
+
+    try:
+        return getDetails["data"][0]["id"]
+    except IndexError:
+        return 0
 
 def getClips(header, bID):
     clipList = []
-    getDetails = httpx.get(f"https://api.twitch.tv/helix/clips?broadcaster_id={bID}&first=3", headers=header).json()
+
+    if bID == 0:
+        return clipList
+    else:
+        getDetails = httpx.get(f"https://api.twitch.tv/helix/clips?broadcaster_id={bID}&first=3", headers=header).json()
 
     for i in getDetails['data']:
         clipList.append([("{:,}".format(i['view_count'])), i['duration'], i['title'], dateConversion(i['created_at']), i['url'], i['thumbnail_url']])
@@ -313,20 +324,33 @@ def getClips(header, bID):
 def getData(streamer):
     streamerDict = {}
     getDetails = httpx.get(f"https://twitchtracker.com/api/channels/summary/{streamer}", headers={'User-Agent': 'Chrome'}).json()
-    streamerDict[streamer] = [getDetails['rank'], ("{:,}".format(getDetails['avg_viewers'])), ("{:,}".format(getDetails['max_viewers'])), 
+
+    try:
+        streamerDict[streamer] = [getDetails['rank'], ("{:,}".format(getDetails['avg_viewers'])), ("{:,}".format(getDetails['max_viewers'])), 
                              ("{:,}".format(getDetails['followers'])), ("{:,}".format(getDetails['followers_total'])), ("{:,}".format(getDetails['views_total']))]
+    except KeyError:
+        streamerDict[streamer] = []
 
     return streamerDict
 
 def getBans(streamer):
     bansDict = {}
     banInformation = []
+    getBanStatus = ""
     getDetails = httpx.get(f"https://streamerbans.com/user/{streamer}").text
 
-    bs4Obj = BeautifulSoup(getDetails, 'lxml')
-    totalBans = bs4Obj.find_all("dd", {"class": "text-3xl"})
-    getBanStatus = bs4Obj.find_all(("p"), {"class": "text-sm"})[-1]
-    getTrackStatus = bs4Obj.find_all(("h1"), {"class": "my-24"})[0]
+    try:
+        bs4Obj = BeautifulSoup(getDetails, 'lxml')
+        totalBans = bs4Obj.find_all("dd", {"class": "text-3xl"})
+        getBanStatus = bs4Obj.find_all(("p"), {"class": "text-sm"})[-1]
+    except IndexError:
+        bansDict[streamer] = [[], 0]
+        return bansDict
+
+    try:
+        getTrackStatus = bs4Obj.find_all(("h1"), {"class": "my-24"})[0]
+    except IndexError:
+        getTrackStatus = ""
 
     for n in totalBans:
         banInformation.append(n.text)
