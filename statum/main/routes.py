@@ -304,7 +304,7 @@ def getClips(header, bID):
     getDetails = httpx.get(f"https://api.twitch.tv/helix/clips?broadcaster_id={bID}&first=3", headers=header).json()
 
     for i in getDetails['data']:
-        clipList.append([i['view_count'], i['duration'], i['title'], i['created_at'], i['url'], i['thumbnail_url']])
+        clipList.append([("{:,}".format(i['view_count'])), i['duration'], i['title'], dateConversion(i['created_at']), i['url'], i['thumbnail_url']])
     
     return clipList
 

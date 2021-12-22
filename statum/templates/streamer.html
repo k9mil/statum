@@ -61,10 +61,16 @@
                             <div class="vod-object isa-clip-object">
                                 <div class="vod-data">
                                     <img src="{{top_clips[n][5] }}" width="200" height="200">
-                                    <h1 class="time">{{ top_clips[n][1] }}s</h1>
+                                    <div class="vod-time">
+                                        <h1 class="time">{{top_clips[n][1]}}s</h1>
+                                    </div>
+                                    <div class="vod-views">
+                                        <h1 class="views">{{top_clips[n][0]}} views</h1>
+                                    </div>
                                 </div>
                                 <div class="vod-title">
                                     <h1>{{ top_clips[n][2] }}</h1>
+                                    <h2>{{ top_clips[n][3] }}</h2>
                                 </div>
                             </div>
                         </a>
