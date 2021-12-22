@@ -283,11 +283,13 @@ def getVOD(streamer):
             vod_url = responseC.json()["data"][n]["url"]
             title = responseC.json()["data"][n]["title"]
             duration = responseC.json()["data"][n]["duration"]
+            creation = responseC.json()["data"][n]["created_at"]
+            view_count = responseC.json()["data"][n]["view_count"]
             if thumbnail_url == "":
-                vod_data[n] = ["https://ffwallpaper.com/card/tv-static/tv-static--12.jpg", vod_url, title, duration]
+                vod_data[n] = ["https://ffwallpaper.com/card/tv-static/tv-static--12.jpg", vod_url, title, duration, dateConversion(creation), ("{:,}".format(view_count))]
             else:
                 thumbnail_url = thumbnail_url.replace("%{width}x%{height}.jpg", "1920x1080.jpg")
-                vod_data[n] = [thumbnail_url, vod_url, title, duration]
+                vod_data[n] = [thumbnail_url, vod_url, title, duration, dateConversion(creation), ("{:,}".format(view_count))]
     except IndexError:
         pass
     
@@ -338,3 +340,9 @@ def epochConversion(**kwargs):
     epochCurrent = int(time.mktime(datetime.datetime.utcnow().timetuple()))
     epochDifference = epochCurrent - int(time.mktime(time.strptime(twitch_api_date_parsed, "%d.%m.%Y %H:%M:%S")))
     return str(datetime.timedelta(seconds = epochDifference))
+
+def dateConversion(created_at):
+    formatter = '%Y-%m-%dT%H:%M:%SZ'
+    dtobj = datetime.datetime.strptime(created_at, formatter)
+    convertedDate = dtobj.strftime("%#d %b, %H:%M")
+    return convertedDate

@@ -204,21 +204,65 @@ a {
 .vod-results .vod-object .vod-data h1,
 .isa-clips .vod-object .vod-data h1 {
     color: rgb(255, 255, 255);
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
     overflow: hidden;
 }
 
-.vod-results .vod-object .vod-data .time,
-.isa-clips .vod-object .vod-data .time {
+.vod-results .vod-object .vod-data h2,
+.isa-clips .vod-object .vod-data h2 {
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    font-weight: normal;
+    overflow: hidden;
+}
+
+.vod-results .vod-object .vod-data .vod-time .time,
+.isa-clips .vod-object .vod-data .vod-time .time {
     position: absolute;
     top: 90%;
     left: 85%;
     transform: translate( -50%, -50% );
     padding: 2px 8px;
-    border-radius: 3px;
-    background-color: rgba(0,0,0,.7);
+    border-radius: 999px;
+    background-color: rgba(5, 5, 9, 0.6);
     border: 0 solid;
+}
+
+.vod-results .vod-object .vod-data .vod-views .views,
+.isa-clips .vod-object .vod-data .vod-views .views {
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    transform: translate( -50%, -50% );
+    padding: 2px 8px;
+    border-radius: 999px;
+    background-color: rgba(5, 5, 9, 0.6);
+    border: 0 solid;
+}
+
+.vod-results .vod-object .vod-data .vod-views,
+.isa-clips .vod-object .vod-data .vod-views {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: space-between;
+}
+
+/* .vod-results .vod-object .vod-data .vod-views .eye-svg img,
+.isa-clips .vod-object .vod-data .vod-views .eye-svg img {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 10%;
+    left: 15%
+} */
+
+.vod-results .vod-object .vod-data .vod-views .views h1,
+.isa-clips .vod-object .vod-data .vod-views .views h1,
+.vod-results .vod-object .vod-data .vod-time .time h1,
+.isa-clips .vod-object .vod-data .vod-time .time h1 {
+    font-size: 14px;
 }
 
 .vod-area .title-text {
@@ -245,8 +289,19 @@ a {
     color: rgb(255, 255, 255);
     margin: 10px;
     text-align: left;
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.vod-object .vod-title h2 {
+    color: rgb(190, 190, 200);
+    margin: 10px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: normal;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
