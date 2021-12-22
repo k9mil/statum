@@ -326,20 +326,19 @@ def getBans(streamer):
     bs4Obj = BeautifulSoup(getDetails, 'lxml')
     totalBans = bs4Obj.find_all("dd", {"class": "text-3xl"})
     getBanStatus = bs4Obj.find_all(("p"), {"class": "text-sm"})[-1]
+    getTrackStatus = bs4Obj.find_all(("h1"), {"class": "my-24"})[0]
 
     for n in totalBans:
         banInformation.append(n.text)
-    
-    print(getBanStatus.text)
 
-    if "Unbanned" in getBanStatus.text:
+    if "Unbanned" in getBanStatus.text or getTrackStatus:
         currentBan = 0
-    else:
-        currentBan = 1
+    else: currentBan = 1
 
-    bansDict[streamer] = [banInformation, currentBan]
-
-    print(bansDict)
+    if getTrackStatus:
+        bansDict[streamer] = [[], currentBan]
+    else:    
+        bansDict[streamer] = [banInformation, currentBan]
 
     return bansDict
 
