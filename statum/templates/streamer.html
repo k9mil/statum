@@ -34,28 +34,32 @@
             </div>
             <div class="isa-bans">
                 <div class="data-point">
-                    <h1>{{ streamer }} is NOT currently banned.</h1>
+                    {% if ban_data[streamer][1] == 0 %}
+                        <h1>{{ streamer }} is NOT currently banned.</h1>
+                    {% else %}
+                        <h1>{{ streamer }} IS currently banned.</h1>
+                    {% endif %}
                 </div>
                 <div class="data-point">
                     <h1>How many times has {{ streamer }} been banned?</h1>
-                    {% if ban_data[streamer][0] %}
-                        <h2>{{ streamer }} has been banned {{ ban_data[streamer][0] }} time(s).</h2>
+                    {% if ban_data[streamer][0][0] %}
+                        <h2>{{ streamer }} has been banned {{ ban_data[streamer][0][0] }} time(s).</h2>
                     {% else %}
                         <h2>{{ streamer }} has never been baned.</h2>
                     {% endif %}
                 </div>
                 <div class="data-point">
                     <h1>When was {{ streamer }}'s last ban?</h1>
-                    {% if ban_data[streamer][1] %}
-                        <h2>{{ streamer }}'s last ban was {{ ban_data[streamer][1] }}.</h2>
+                    {% if ban_data[streamer][0][1] %}
+                        <h2>{{ streamer }}'s last ban was {{ ban_data[streamer][0][1] }}.</h2>
                     {% else %}
                         <h2>{{ streamer }} has never had a last ban, yet.</h2>
                         {% endif %}
                 </div>
                 <div class="data-point">
                     <h1>What was {{ streamer }}'s longest ban?</h1>
-                    {% if ban_data[streamer][2] %}
-                        <h2>{{ streamer }}'s longest ban was {{ ban_data[streamer][2] }}.</h2>
+                    {% if ban_data[streamer][0][2] %}
+                        <h2>{{ streamer }}'s longest ban was {{ ban_data[streamer][0][2] }}.</h2>
                     {% else %}
                         <h2>{{ streamer }}'s longest ban was approximately 0 seconds long.</h2>
                     {% endif %}
@@ -64,7 +68,7 @@
         </div>
         <div class="individual-streamer-area-right">
             <div class="isa-clips-header">
-                <h1 class="gradient-color">popular clips.</h1>
+                <h1 class="gradient-color">top clips.</h1>
             </div>
             <div class="isa-clips">
                 {% if top_clips %}

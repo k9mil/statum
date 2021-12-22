@@ -118,8 +118,6 @@ def randomStream():
         getStreamsRequest = httpx.get(usersFollowedURL, headers=header).json()
         requestInstances = (len(getStreamsRequest["data"]) - 1)
 
-        print(getStreamsRequest)
-
         if (getStreamsRequest['data'][0]['viewer_count'] < MAX_VIEWERS):
             indexRandom(getStreamsRequest, streamerIDs)
 
@@ -128,7 +126,6 @@ def randomStream():
         else: 
             pass
 
-    print(streamerIDs)
     System.indexRandomDB(streamerIDs)
     randomStreamer = chooseRandom(streamerIDs)
     return randomStreamer
@@ -141,7 +138,8 @@ def indexRandom(getStreamsRequest, streamerIDs):
         else:
             streamerIDs.append(getStreamsRequest['data'][i]['user_login'])
     
-    print(streamerIDs)
+    print(getStreamsRequest['data'][0])
+    print(streamerIDs[0])
     return streamerIDs
 
 def chooseRandom(streamerIDs):
@@ -327,11 +325,21 @@ def getBans(streamer):
 
     bs4Obj = BeautifulSoup(getDetails, 'lxml')
     totalBans = bs4Obj.find_all("dd", {"class": "text-3xl"})
+    getBanStatus = bs4Obj.find_all(("p"), {"class": "text-sm"})[-1]
 
     for n in totalBans:
         banInformation.append(n.text)
+    
+    print(getBanStatus.text)
 
-    bansDict[streamer] = banInformation
+    if "Unbanned" in getBanStatus.text:
+        currentBan = 0
+    else:
+        currentBan = 1
+
+    bansDict[streamer] = [banInformation, currentBan]
+
+    print(bansDict)
 
     return bansDict
 
