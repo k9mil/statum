@@ -46,7 +46,7 @@
                 </div>
                 <div class="data-point">
                     <h1>When was {{ streamer }}'s last ban?</h1>
-                    {% if ban_data[streamer][0] %}
+                    {% if ban_data[streamer][1] %}
                         <h2>{{ streamer }}'s last ban was {{ ban_data[streamer][1] }}.</h2>
                     {% else %}
                         <h2>{{ streamer }} has never had a last ban, yet.</h2>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="data-point">
                     <h1>What was {{ streamer }}'s longest ban?</h1>
-                    {% if ban_data[streamer][0] %}
+                    {% if ban_data[streamer][2] %}
                         <h2>{{ streamer }}'s longest ban was {{ ban_data[streamer][2] }}.</h2>
                     {% else %}
                         <h2>{{ streamer }}'s longest ban was approximately 0 seconds long.</h2>

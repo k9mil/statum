@@ -118,6 +118,8 @@ def randomStream():
         getStreamsRequest = httpx.get(usersFollowedURL, headers=header).json()
         requestInstances = (len(getStreamsRequest["data"]) - 1)
 
+        print(getStreamsRequest)
+
         if (getStreamsRequest['data'][0]['viewer_count'] < MAX_VIEWERS):
             indexRandom(getStreamsRequest, streamerIDs)
 
@@ -126,6 +128,7 @@ def randomStream():
         else: 
             pass
 
+    print(streamerIDs)
     System.indexRandomDB(streamerIDs)
     randomStreamer = chooseRandom(streamerIDs)
     return randomStreamer
@@ -138,6 +141,7 @@ def indexRandom(getStreamsRequest, streamerIDs):
         else:
             streamerIDs.append(getStreamsRequest['data'][i]['user_login'])
     
+    print(streamerIDs)
     return streamerIDs
 
 def chooseRandom(streamerIDs):
