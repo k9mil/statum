@@ -44,9 +44,9 @@ Home Page             |  Dashboard
 :-------------------------:|:-------------------------:
 ![Home Page](https://i.imgur.com/NqqKMH1.jpg)  |  ![Dashboard](https://i.imgur.com/SVqe6y2.jpg)
 Random             |  VODs
-![Home Page](https://i.imgur.com/gJdQ4wb.jpg)  |  ![VODs](https://i.imgur.com/CnyTsqP.jpg)
+![Random](https://i.imgur.com/fG35xjo.jpg)  |  ![VODs](https://i.imgur.com/gJdQ4wb.jpg)
 Streamer Page | TBD
-![Home Page](https://i.imgur.com/HdRLSOU.jpeg)
+![Streamer Page](https://i.imgur.com/HdRLSOU.jpeg)
 
 ## Contributing 🤠
 
