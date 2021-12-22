@@ -1,1 +1,1 @@
-web: gunicorn statum:app
+web: gunicorn statum:create_app()
