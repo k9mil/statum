@@ -119,16 +119,14 @@ def randomStream():
         requestInstances = (len(getStreamsRequest["data"]) - 1)
 
         if (getStreamsRequest['data'][0]['viewer_count'] < MAX_VIEWERS):
-            print('a')
+            print('balls')
             indexRandom(getStreamsRequest, streamerIDs)
 
         if (getStreamsRequest['data'][requestInstances]['viewer_count'] < MIN_VIEWERS):
-            print('b')
             request_status = False
         else: 
             pass
     
-    print(getStreamsRequest)
     System.indexRandomDB(streamerIDs)
     randomStreamer = chooseRandom(streamerIDs)
     return randomStreamer
@@ -141,6 +139,7 @@ def indexRandom(getStreamsRequest, streamerIDs):
         else:
             streamerIDs.append(getStreamsRequest['data'][i]['user_login'])
     
+    print(getStreamsRequest['data'])
     print(getStreamsRequest['data'][0])
     print(streamerIDs[0])
     return streamerIDs
