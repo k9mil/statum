@@ -153,7 +153,7 @@ def generateToken(*bearer):
     if bearer:
         URL = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
     else:
-        URL = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=https://statoom.herokuapp.com//&code={f.args['code']}"
+        URL = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=https://statoom.herokuapp.com/&code={f.args['code']}"
     
     postedURL = httpx.post(URL).json()
     header = {'Authorization': 'Bearer ' + postedURL["access_token"], 'Client-ID': Config.CLIENT_ID}
