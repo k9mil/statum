@@ -19,6 +19,10 @@ statum, a small side project, is a web app built in Flask which servers as a too
 
 The backlog of the features yet to be implemented are available on a public Trello workspace which can be viewed at [statum, board](https://trello.com/b/b6WPU1j8/statum-board).
 
+## Demo Server 💻
+
+A demo server is available, on a Heroku deno: [statoom](https://statoom.herokuapp.com/).
+
 ## Installation process 🤓
 
 As for now, [Python](https://www.python.org/) is **necessary** for you to be able to run this web application.
