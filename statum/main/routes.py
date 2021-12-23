@@ -9,7 +9,7 @@ import httpx, datetime, json, time, random, lxml
 
 main = Blueprint('main', __name__)
 
-login_url = f"https://id.twitch.tv/oauth2/authorize?client_id={Config.CLIENT_ID}&redirect_uri=https://polar-temple-33190.herokuapp.com//dashboard&response_type=code&scope=openid+user:read:email&claims={'id_token'}"
+login_url = f"https://id.twitch.tv/oauth2/authorize?client_id={Config.CLIENT_ID}&redirect_uri=https://polar-temple-33190.herokuapp.com/dashboard&response_type=code&scope=openid+user:read:email&claims={'id_token'}"
 
 @main.route("/")
 def index():
