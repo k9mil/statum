@@ -1,9 +1,10 @@
 from flask import Flask
 from flask_apscheduler import APScheduler
 from statum.config import Config
-import pymongo
+import pymongo, certifi
 
-client = pymongo.MongoClient(f"mongodb+srv://statum:{Config.MONGO_PASSWORD}@statum.c5zu0.mongodb.net/statum_db?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE")
+ca = certifi.where()
+client = pymongo.MongoClient(f"mongodb+srv://statum:{Config.MONGO_PASSWORD}@statum.c5zu0.mongodb.net/statum_db?retryWrites=true&w=majority", tlsCAFile=ca)
 database = client.statum_db
 scheduler = APScheduler()
 scheduler.start()
