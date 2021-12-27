@@ -11,7 +11,7 @@ main = Blueprint('main', __name__)
 def index():
     if session:
         return redirect(url_for("main.dashboard"))
-    return render_template("index.html", login_url={Config.LOGIN_URL})
+    return render_template("index.html", login_url=Config.LOGIN_URL)
 
 @main.route("/dashboard")
 async def dashboard():
@@ -35,7 +35,7 @@ async def dashboard():
     except UnboundLocalError:
          return redirect(url_for("main.index"))
 
-    return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, login_url={Config.LOGIN_URL})
+    return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, login_url=Config.LOGIN_URL)
 
 @main.route("/vod/<streamer_name>")
 def vod(streamer_name):
@@ -58,16 +58,16 @@ def streamer(streamer_name):
 
 @main.route("/about")
 def about():
-    return render_template("about.html", login_url={Config.LOGIN_URL})
+    return render_template("about.html", login_url=Config.LOGIN_URL)
 
 @main.route("/privacy")
 def privacy():
-    return render_template("privacy.html", login_url={Config.LOGIN_URL})
+    return render_template("privacy.html", login_url=Config.LOGIN_URL)
     
 @main.route("/tos")
 def terms_of_service():
     database.random_streamer_data.remove()
-    return render_template("tos.html", login_url={Config.LOGIN_URL})
+    return render_template("tos.html", login_url=Config.LOGIN_URL)
 
 @main.route("/random")
 def randomHTML():
