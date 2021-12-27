@@ -33,7 +33,7 @@ async def dashboard():
     try:
         await send_requests(streamer_data, streamer_list, top_streamer_data, clips_data)
     except UnboundLocalError:
-         return redirect(url_for("main.index"))
+        return redirect(url_for("main.index"))
 
     return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, login_url=Config.LOGIN_URL)
 
