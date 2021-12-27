@@ -1,6 +1,6 @@
 # What is statum? 🏗️
 
-statum, a small side project, is a web app built in Flask which servers as a tool to make the usage of Twitch more enjoyable, with unique features & the ability to get in-depth information of your most beloved streamers.
+statum, a small side project, is a web app built in Flask which serves as a tool to make the usage of Twitch more enjoyable, with unique features & the ability to get in-depth information of your most beloved streamers.
 
 ## Features 😂
 
