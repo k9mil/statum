@@ -72,7 +72,6 @@ def randomStream():
         requestInstances = (len(getStreamsRequest["data"]) - 1)
 
         if (getStreamsRequest['data'][0]['viewer_count'] < MAX_VIEWERS):
-            print('balls')
             indexRandom(getStreamsRequest, streamerIDs)
 
         if (getStreamsRequest['data'][requestInstances]['viewer_count'] < MIN_VIEWERS):
@@ -396,17 +395,21 @@ def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
     If it matches, try and index the streamer and populate data if the streamer is live, otherwise populate with differnet data.
 
     Args:
-        results:
-        streamer_data:
-        getDetailsJSON:
-        streamer:
+        results: Number of results for a specific streamer, default is 20.
+        streamer_data: An empty dictionary that will be populated with streamer data.
+        getDetailsJSON: The json object Twitch returns from a GET request containing the data.
+        streamer: The username of the streamer to be found and indexed.
 
     Returns:
-        .
+        A dict mapping keys to the corresponding values, with the keys being the Twitch usernames
+        and the values are a list, which contains their live status, game name & time streamed. For example:
+
+        {
+            'forsen': ['NOT LIVE', 'none', 'none']
+        }
 
     Raises:
-        parser.ParserError: 
-
+        parser.ParserError: A parser error is raised.
     """
 
     for numb in range(results):
@@ -422,6 +425,7 @@ def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
             break
         else:
             pass
+    
     return streamer_data
 
 def getVOD(streamer):
@@ -632,8 +636,6 @@ def epochConversion(**kwargs):
 
         0:02:02
     """
-
-    print(kwargs)
 
     if not kwargs['data']:
         twitch_api_date_parsed = parser.parse(kwargs['jsonData']["data"][kwargs['index']]["started_at"]).strftime("%d.%m.%Y %H:%M:%S")
