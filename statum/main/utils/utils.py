@@ -64,8 +64,7 @@ def randomStream() -> str:
     request_status: bool = True
     streamerIDs: list[int] = []
 
-    header = generateToken("bearer")
-    print(header)
+    header: dict[str, str] = generateToken("bearer")
     usersFollowedURL: str = "https://api.twitch.tv/helix/streams"
     getStreamsRequest: dict = httpx.get(usersFollowedURL, headers=header).json()
 
@@ -82,10 +81,8 @@ def randomStream() -> str:
         else: 
             pass
     
-    print(streamerIDs)
     System.indexRandomDB(streamerIDs)
-    randomStreamer = chooseRandom(streamerIDs)
-    print(randomStreamer)
+    randomStreamer: str = chooseRandom(streamerIDs)
     return randomStreamer
 
 def indexRandom(getStreamsRequest: dict, streamerIDs: list[int]) -> list[int]:
