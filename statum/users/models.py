@@ -57,7 +57,7 @@ class User:
             database.twitch_user_data.insert_one(user)
             return self.startSession(user)
 
-    def addFavourite(user_id: int, streamer_name: str):
+    def addDeleteFavourites(user_id: int, streamer_name: str):
         """Adds a favourite streamer to the user id.
 
         A query is made to see whether the user exists, if it does, it finds the users' object
@@ -80,7 +80,10 @@ class User:
                     {"$push": {'favourites': streamer_name }}
                 )
             else:
-                pass
+                database.twitch_user_data.find_one_and_update(
+                    {"_id": user_id},
+                    {"$pull": {'favourites': streamer_name }}
+                )
         else:
             pass
         

@@ -679,4 +679,4 @@ def dateConversion(created_at: str):
 
 def addToFavourites(streamer_name: str):
     user_data_id: int = session["user"]["_id"]
-    User.addFavourite(user_data_id, streamer_name)
+    User.addDeleteFavourites(user_data_id, streamer_name)
