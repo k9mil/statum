@@ -55,19 +55,24 @@ class System:
         else:
             database.random_streamer_data.insert_one(streams)
 
-    def loadRandom():
+    def loadRandom() -> dict[int, list[str]]:
         """Loads a random streamer from the database.
 
         It queries the database and if the count isn't 0 (that is, if something is in the database),
-        it returns a random streamer name via "find_one()", else it passes.
+        it returns a dictionary with an id, and a list of streamers.
 
         Args:
             None
 
         Returns:
-            None
+            An object is returned via MongoDB as explained above. For example:
+
+            {
+                '_id': 1, 
+                'streamers': ['death_unites_us', 'Norihss', 'djjasonpalma',  'r0wincyy', 'zuka_TV', 'behram1312', 'Nisqyy']
+            }
         """
-        if database.random_streamer_data.count() != 0:
+        if database.random_streamer_data.count_documents({'_id': 1}) != 0:
             return database["random_streamer_data"].find_one()
         else:
             pass

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, session, url_for, redirec
 from statum.config import Config
 from furl import furl
 from statum.system.models import System
+from statum.users.models import User
 from statum.main.utils.utils import generateToken, twitch_login, send_requests, getVOD, getClips, getStreamerID, getData, getBans, randomIndexedStream, randomStream, addToFavourites
 from statum import database
 
@@ -22,6 +23,8 @@ async def dashboard():
 
     if session:
         streamer_list = session["user"]["follower_list"]
+        user_data_id: int = session["user"]["_id"]
+        favourites = User.loadFavourites(user_data_id)
     # else:
         # streamer_list = load_default_data()
 
@@ -35,7 +38,8 @@ async def dashboard():
     except UnboundLocalError:
         return redirect(url_for("main.index"))
 
-    return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, login_url=Config.LOGIN_URL)
+    print(favourites)
+    return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, favourites=favourites, login_url=Config.LOGIN_URL)
 
 @main.route("/vod/<streamer_name>")
 def vod(streamer_name):

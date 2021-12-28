@@ -62,7 +62,8 @@ class User:
 
         A query is made to see whether the user exists, if it does, it finds the users' object
         in the 'twitch_user_data' table, and pushes the streamer that is favourited
-        onto the database object.
+        onto the database object. It also ensures that the favourite does not already
+        exist in the users' object.
 
         Args:
             user_id: A user (id) which serves as a unique identifier.
@@ -80,6 +81,29 @@ class User:
                 )
             else:
                 pass
+        else:
+            pass
+        
+    def loadFavourites(user_id: int) -> list[str]:
+        """Loads a list of the users' favourite streamer.
+
+        It queries the database and if the count isn't 0 (that is, if something is in the database),
+        it returns a dictionary with the MongoDB object, containing the user_id and the list
+        of streamers.
+
+        Args:
+            user_id: A user (id) which serves as a unique identifier.
+
+        Returns:
+            A list of the users' favourite streamers. For example:
+
+            [
+                'summit1g', 'BobRoss', 'summit1g'
+            ]
+        """
+
+        if database.twitch_user_data.count_documents({'_id': user_id}) != 0:
+            return database.twitch_user_data.find_one({'_id': user_id})['favourites']
         else:
             pass
 
