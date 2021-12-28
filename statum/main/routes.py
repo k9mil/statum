@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, session, url_for, redirect
 from statum.config import Config
 from furl import furl
-from statum.users.models import System
+from statum.system.models import System
 from statum.main.utils.utils import generateToken, twitch_login, send_requests, getVOD, getClips, getStreamerID, getData, getBans, randomIndexedStream, randomStream
 from statum import database
 
