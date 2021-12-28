@@ -1,10 +1,11 @@
 from flask import request, session
-from statum.users.models import User, System
+from statum.users.models import User
+from statum.system.models import System
 from statum.config import Config
 from furl import furl
 from bs4 import BeautifulSoup
 from dateutil import parser
-from statum import create_app, database
+from statum import database
 import json, httpx, random, datetime, time
 
 def load_default_data():
