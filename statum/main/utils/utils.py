@@ -435,7 +435,7 @@ def indexStreamer(results: int, streamer_data: dict, getDetailsJSON: dict, strea
     
     return streamer_data
 
-def getVOD(streamer: str) -> dict[int, list]:
+def getVOD(streamer: str, *multipleStreamers: str) -> dict[int, list]:
     """Gets VOD data from a specific streamer that is passed through as an argument.
 
     As usual, it generates a token, and then proceeds to send two GET requests to Twitch, 
@@ -468,8 +468,14 @@ def getVOD(streamer: str) -> dict[int, list]:
     findVideoURL: str = f"https://api.twitch.tv/helix/videos?user_id={requestID}&type=archive"
     responseC: int = httpx.get(findVideoURL, headers=header)
 
+    loopLength: int = 0
+
+    if multipleStreamers:
+        loopLength = 3
+    else: loopLength = 20
+
     try:
-        for n in range(20):
+        for n in range(loopLength):
             thumbnail_url: str = responseC.json()["data"][n]["thumbnail_url"]
             vod_url: str = responseC.json()["data"][n]["url"]
             title: str = responseC.json()["data"][n]["title"]

@@ -83,6 +83,25 @@ def settings():
     favourites = User.loadFavourites(user_data_id)
     return render_template("settings.html", favourites=favourites, login_url=Config.LOGIN_URL)
 
+@main.route("/favourites")
+def favourites():
+    user_data_id: int = session["user"]["_id"]
+    favourites = User.loadFavourites(user_data_id)
+    vodLength: int = 0
+    vodConglomerate = []
+
+    for streamer in favourites:
+        vod_data = getVOD(streamer, "multiple")
+        vodLength += len(vod_data)
+        vodConglomerate.append(vod_data)
+
+    print(vodConglomerate)
+
+    if vodLength > 1:
+        return render_template("favourites.html", vod_data=vod_data, vodLength = vodLength)
+    else:
+        return render_template("favourites.html")
+
 @main.route("/random")
 def randomHTML():
     randomData = System.loadRandom()

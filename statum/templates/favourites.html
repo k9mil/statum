@@ -1,0 +1,30 @@
+{% extends "./base/base.html" %}
+{% block top %}
+    <div class="vod-top">
+        <h1 class="vod-header gradient-color">latest favourite vods.</h1>
+    </div>
+    <div class="vod-results">
+        {% if vod_data %}
+            {% for n in range(vodLength) %}
+                <a href="{{vod_data[n][1]}}" target="_blank">
+                    <div class="vod-object">
+                        <div class="vod-data">
+                            <img src="{{vod_data[n][0]}}" width="200" height="200">
+                            <div class="vod-time">
+                                <h1 class="time">{{vod_data[n][3]}}</h1>
+                            </div>
+                            <div class="vod-views">
+                                <h1 class="views">{{vod_data[n][5]}} views</h1>
+                            </div>
+                        </div>
+                        <div class="vod-title">
+                            <h1>{{vod_data[n][2]}}</h1>
+                            <h2>{{vod_data[n][4]}}</h2>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+        {% endif %}
+    </div>
+{% endblock %}
