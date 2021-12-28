@@ -676,3 +676,7 @@ def dateConversion(created_at: str):
     convertedDate = dtobj.strftime("%#d %b, %H:%M")
 
     return convertedDate
+
+def addToFavourites(streamer_name: str):
+    user_data_id: int = session["user"]["_id"]
+    User.addFavourite(user_data_id, streamer_name)

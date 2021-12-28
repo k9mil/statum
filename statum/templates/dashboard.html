@@ -18,6 +18,7 @@
                                     <div class="clip-likes icons">
                                         <a href="{{ url_for('main.vod', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/tv.svg') }}" alt=""></a>
                                         <a href="{{ url_for('main.streamer', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/user.svg') }}" alt=""></a>
+                                        <a href="{{ url_for('main.favourite', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/star.svg') }}" alt=""></a>
                                         <a href="https://twitch.tv/{{ streamer }}" target="_blank"><img src="{{ url_for('static', filename='/img/external-link.svg') }}" alt=""></a>
                                     </div>
                                 </div>
@@ -39,6 +40,7 @@
                                 <div class="clip-likes icons">
                                     <a href="{{ url_for('main.vod', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/tv.svg') }}" alt=""></a>
                                     <a href="{{ url_for('main.streamer', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/user.svg') }}" alt=""></a>
+                                    <a href="{{ url_for('main.favourite', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/star.svg') }}" alt=""></a>
                                     <a href="https://twitch.tv/{{ streamer }}" target="_blank"><img src="{{ url_for('static', filename='/img/external-link.svg') }}" alt=""></a>
                                 </div>
                             </div>

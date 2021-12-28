@@ -41,7 +41,8 @@ class User:
         """
         user: dict[int, dict[str, str]] = {
             "_id": user_id,
-            "follower_list": follower_list
+            "follower_list": follower_list,
+            "favourites": []
         }
         
         if database.twitch_user_data.count_documents({'_id': user_id}) != 0:
@@ -55,3 +56,17 @@ class User:
         else:
             database.twitch_user_data.insert_one(user)
             return self.startSession(user)
+
+    def addFavourite(user_id: int, streamer_name: str):
+        """
+        """
+
+        if database.twitch_user_data.count_documents({'_id': user_id}) != 0:
+            database.twitch_user_data.find_one_and_update(
+                {"_id": user_id},
+                {"$push": {'favourites': streamer_name }}
+            )
+
+        else:
+            pass
+

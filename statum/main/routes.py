@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, session, url_for, redirec
 from statum.config import Config
 from furl import furl
 from statum.system.models import System
-from statum.main.utils.utils import generateToken, twitch_login, send_requests, getVOD, getClips, getStreamerID, getData, getBans, randomIndexedStream, randomStream
+from statum.main.utils.utils import generateToken, twitch_login, send_requests, getVOD, getClips, getStreamerID, getData, getBans, randomIndexedStream, randomStream, addToFavourites
 from statum import database
 
 main = Blueprint('main', __name__)
@@ -68,6 +68,15 @@ def privacy():
 def terms_of_service():
     database.random_streamer_data.remove()
     return render_template("tos.html", login_url=Config.LOGIN_URL)
+
+@main.route("/favourite/<streamer_name>")
+def favourite(streamer_name):
+    addToFavourites(streamer_name)
+    return redirect(url_for("main.dashboard"))
+
+@main.route("/settings")
+def settings():
+    return render_template("settings.html", login_url=Config.LOGIN_URL)
 
 @main.route("/random")
 def randomHTML():
