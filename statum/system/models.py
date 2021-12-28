@@ -7,7 +7,7 @@ class System:
     every 10 minutes & loading a random streamer.
 
     """
-    def indexStreamer(self, broadcaster_id, broadcaster_username):
+    def indexStreamer(self, broadcaster_id: int, broadcaster_username: str):
         """Indexes a streamer into the database.
 
         Creates a broadcaster object comprised of an id (the streamer id), as well as the streamer (broadcaster) username,
@@ -21,7 +21,7 @@ class System:
         Returns:
             None
         """
-        broadcaster = {
+        broadcaster: dict[int, str] = {
             "_id": broadcaster_id,
             "broadcaster_name": broadcaster_username
         }
@@ -31,7 +31,7 @@ class System:
         else:
             database.twitch_streamer_data.insert_one(broadcaster)
 
-    def indexRandomDB(streamerIDs):
+    def indexRandomDB(streamerIDs: list[str]):
         """Indexes streamers into the DB used for the /random/ endpoint.
 
         Creates a streams object comprised of an id (static, 1), as well as a streamer list
@@ -45,7 +45,7 @@ class System:
         Returns:
             None
         """
-        streams = {
+        streams: dict[int, list[str]] = {
             "_id": 1,
             "streamers": streamerIDs
         }

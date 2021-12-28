@@ -25,7 +25,7 @@ class User:
         session["user"] = user
         return jsonify(user), 200
 
-    def twitchSignup(self, user_id, follower_list):
+    def twitchSignup(self, user_id: int, follower_list: dict[str, str]):
         """Adds, or inserts data into the database with the users' follows.
 
         Creates a user object comprised of an id (the user id) as well as the follower list passed through
@@ -39,7 +39,7 @@ class User:
         Returns:
             A session is returned.
         """
-        user = {
+        user: dict[int, dict[str, str]] = {
             "_id": user_id,
             "follower_list": follower_list
         }
