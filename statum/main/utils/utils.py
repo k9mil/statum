@@ -635,11 +635,16 @@ def epochConversion(**kwargs):
         A time, in the format: '%d.%m.%Y %H:%M:%S' casted as a string. For example:
 
         0:02:02
+
+    Raises:
+        KeyError: A KeyError is raised when the kwargs['jsonData']['data'] is not found.
     """
 
-    if not kwargs['data']:
+    print(kwargs)
+
+    try:
         twitch_api_date_parsed = parser.parse(kwargs['jsonData']["data"][kwargs['index']]["started_at"]).strftime("%d.%m.%Y %H:%M:%S")
-    else: 
+    except KeyError: 
         twitch_api_date_parsed = parser.parse(kwargs['data']["started_at"]).strftime("%d.%m.%Y %H:%M:%S")
 
     epochCurrent = int(time.mktime(datetime.datetime.utcnow().timetuple()))
