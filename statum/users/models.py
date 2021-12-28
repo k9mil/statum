@@ -58,15 +58,28 @@ class User:
             return self.startSession(user)
 
     def addFavourite(user_id: int, streamer_name: str):
-        """
+        """Adds a favourite streamer to the user id.
+
+        A query is made to see whether the user exists, if it does, it finds the users' object
+        in the 'twitch_user_data' table, and pushes the streamer that is favourited
+        onto the database object.
+
+        Args:
+            user_id: A user (id) which serves as a unique identifier.
+            streamer_name: The twitch username of the streamer to be added as a favourite.
+        
+        Returns:
+            None
         """
 
         if database.twitch_user_data.count_documents({'_id': user_id}) != 0:
-            database.twitch_user_data.find_one_and_update(
-                {"_id": user_id},
-                {"$push": {'favourites': streamer_name }}
-            )
-
+            if database.twitch_user_data.count_documents({'favourites': streamer_name}) == 0:
+                database.twitch_user_data.find_one_and_update(
+                    {"_id": user_id},
+                    {"$push": {'favourites': streamer_name }}
+                )
+            else:
+                pass
         else:
             pass
 
