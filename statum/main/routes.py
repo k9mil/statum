@@ -69,7 +69,6 @@ def privacy():
     
 @main.route("/tos")
 def terms_of_service():
-    database.random_streamer_data.remove()
     return render_template("tos.html", login_url=Config.LOGIN_URL)
 
 @main.route("/favourite/<streamer_name>")
