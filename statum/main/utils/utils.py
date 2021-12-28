@@ -1,3 +1,4 @@
+from typing import Any
 from flask import request, session
 from statum.users.models import User
 from statum.system.models import System
@@ -8,7 +9,7 @@ from dateutil import parser
 from statum import database
 import json, httpx, random, datetime, time
 
-def load_default_data():
+def load_default_data() -> dict[str, str]:
     """Finds and opens a .json file with streamer data.
 
     Reads from the file and assigns the data to streamer_list.
@@ -26,11 +27,11 @@ def load_default_data():
     """
 
     with open("statum\static\streamers.json", "r") as json_data:
-        streamer_list = json.load(json_data)
+        streamer_list: dict[str, str] = json.load(json_data)
         json_data.close()
         return streamer_list
 
-def randomIndexedStream(streamers):
+def randomIndexedStream(streamers: list[str]) -> str:
     """Receives a list of streamers and returns a random individual.
 
     Args:
@@ -42,7 +43,7 @@ def randomIndexedStream(streamers):
 
     return random.choice(streamers)
 
-def randomStream():
+def randomStream() -> str:
     """This is the main function which decides the random stream to be served by the web app.
 
     It sends requests to the Twitch API until a condition is met, then sents the request_status to false,
@@ -58,19 +59,20 @@ def randomStream():
         "georgehotz"
     """
 
-    MAX_VIEWERS = 100
-    MIN_VIEWERS = 10
-    request_status = True
-    streamerIDs = []
+    MAX_VIEWERS: int = 100
+    MIN_VIEWERS: int = 10
+    request_status: bool = True
+    streamerIDs: list[int] = []
 
     header = generateToken("bearer")
-    usersFollowedURL = "https://api.twitch.tv/helix/streams"
-    getStreamsRequest = httpx.get(usersFollowedURL, headers=header).json()
+    print(header)
+    usersFollowedURL: str = "https://api.twitch.tv/helix/streams"
+    getStreamsRequest: dict = httpx.get(usersFollowedURL, headers=header).json()
 
     while request_status != False:
-        usersFollowedURL = f"https://api.twitch.tv/helix/streams?first=100&after={getStreamsRequest['pagination']['cursor']}"
-        getStreamsRequest = httpx.get(usersFollowedURL, headers=header).json()
-        requestInstances = (len(getStreamsRequest["data"]) - 1)
+        usersFollowedURL: str = f"https://api.twitch.tv/helix/streams?first=100&after={getStreamsRequest['pagination']['cursor']}"
+        getStreamsRequest: dict = httpx.get(usersFollowedURL, headers=header).json()
+        requestInstances: int = (len(getStreamsRequest["data"]) - 1)
 
         if (getStreamsRequest['data'][0]['viewer_count'] < MAX_VIEWERS):
             indexRandom(getStreamsRequest, streamerIDs)
@@ -80,11 +82,13 @@ def randomStream():
         else: 
             pass
     
+    print(streamerIDs)
     System.indexRandomDB(streamerIDs)
     randomStreamer = chooseRandom(streamerIDs)
+    print(randomStreamer)
     return randomStreamer
 
-def indexRandom(getStreamsRequest, streamerIDs):
+def indexRandom(getStreamsRequest: dict, streamerIDs: list[int]) -> list[int]:
     """This function iterates over a sequence * times depending on the length of the GET request returned.
 
     It assigns the length of the GET request to a variable and loops over that amount of times, and checks whether the
@@ -100,6 +104,8 @@ def indexRandom(getStreamsRequest, streamerIDs):
         A list of the streamers, located in the "streamerIDs" variable.
     """
 
+    print(streamerIDs)
+
     requestInstances = len(getStreamsRequest["data"])
     for i in range(requestInstances):
         if getStreamsRequest['data'][i]['user_name'].isascii():
@@ -107,9 +113,10 @@ def indexRandom(getStreamsRequest, streamerIDs):
         else:
             streamerIDs.append(getStreamsRequest['data'][i]['user_login'])
     
+    print(streamerIDs)
     return streamerIDs
 
-def chooseRandom(streamerIDs):
+def chooseRandom(streamerIDs: list[int]) -> str:
     """Receives a list of streamers and returns a random individual.
 
     Args:
@@ -119,9 +126,11 @@ def chooseRandom(streamerIDs):
         None
     """
 
+    print(streamerIDs)
+
     return random.choice(streamerIDs)
 
-def generateToken(*bearer):
+def generateToken(*bearer: str) -> dict[str, str]:
     """Generates a Token which is necessary for some Twitch API calls.
 
     Initially is assigns the full request path to the "f" variable, and if a bearer was provided it assigns a URL which contains a grant_type
@@ -135,19 +144,19 @@ def generateToken(*bearer):
         A header received by the Twitch API.
     """
 
-    f = furl(request.full_path)
+    f: str = furl(request.full_path)
 
     if bearer:
-        URL = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
+        URL: str = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
     else:
-        URL = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=http://localhost:5000&code={f.args['code']}"
+        URL: str = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=http://localhost:5000&code={f.args['code']}"
     
-    postedURL = httpx.post(URL).json()
-    header = {'Authorization': 'Bearer ' + postedURL["access_token"], 'Client-ID': Config.CLIENT_ID}
+    postedURL: dict = httpx.post(URL).json()
+    header: dict[str, str] = {'Authorization': 'Bearer ' + postedURL["access_token"], 'Client-ID': Config.CLIENT_ID}
 
     return header
 
-def twitch_login(header):
+def twitch_login(header: dict[str, str]) -> dict[str, str]:
     """This function is called whenever utilizing Twitch's OAuth measure, either when logging in or updating followers.
 
     By default is sets an empty streamer dict, as well as a default users_url which points to the Twitch API for users. It determines whether the user has a session or not,
@@ -166,31 +175,31 @@ def twitch_login(header):
         }
     """
 
-    streamer_list = {}
-    users_url = "https://api.twitch.tv/helix/users"
+    streamer_list: dict = {}
+    users_url: str = "https://api.twitch.tv/helix/users"
 
     if session:
-        user_data_id = session["user"]["_id"]
+        user_data_id: int = session["user"]["_id"]
     else:
-        response_result = httpx.get(users_url, headers=header).json()
-        user_data_id = response_result["data"][0]["id"]
+        response_result: dict = httpx.get(users_url, headers=header).json()
+        user_data_id: int = response_result["data"][0]["id"]
 
-    usersFollowedURL = f"https://api.twitch.tv/helix/users/follows?from_id={user_data_id}"
-    followRequest = httpx.get(usersFollowedURL, headers=header).json()
-    streamersFollowed = len(followRequest["data"])
+    usersFollowedURL: str = f"https://api.twitch.tv/helix/users/follows?from_id={user_data_id}"
+    followRequest: dict = httpx.get(usersFollowedURL, headers=header).json()
+    streamersFollowed: int = len(followRequest["data"])
 
     for value in range(streamersFollowed):
-        streamerName = followRequest["data"][value]["to_name"]
+        streamerName: str = followRequest["data"][value]["to_name"]
         if streamerName.isascii():
             streamer_list[streamerName] = f"https://twitch.tv/{streamerName}"
         else:
-            streamerName = followRequest["data"][value]["to_login"]
+            streamerName: str = followRequest["data"][value]["to_login"]
             streamer_list[streamerName] = f"https://twitch.tv/{streamerName}"
     
     User().twitchSignup(user_data_id, streamer_list)
     return streamer_list 
 
-async def send_requests(streamer_data, streamer_list, top_streamer_data, clips_data):
+async def send_requests(streamer_data: dict, streamer_list: dict[str, str], top_streamer_data: dict, clips_data: dict):
     """An asynchronous function which serves as a middleman and it's necessary function is to call other functions.
 
     First, it generates a token and stores it in the "header" variable, and proceeds to call
@@ -206,13 +215,13 @@ async def send_requests(streamer_data, streamer_list, top_streamer_data, clips_d
         None
     """
 
-    header = generateToken("bearer")
+    header: dict[str, str] = generateToken("bearer")
     await indexStreamerData(header, streamer_list, streamer_data)
     loadStreamers(header, streamer_list, streamer_data)
     loadTopStreamers(header, top_streamer_data)
     loadClips(clips_data)
 
-def loadTopStreamers(header, top_streamer_data):
+def loadTopStreamers(header: dict[str, str], top_streamer_data: dict):
     """Sends a GET request to the Twitch API with the headers provided, to get a collection of top streamers actively live on the platform.
 
     After the request is sent, showTopStreamerData() is called passing the empty dictionary as well as the result from the GET request.
@@ -225,10 +234,10 @@ def loadTopStreamers(header, top_streamer_data):
         None
     """
 
-    getDetails = httpx.get("https://api.twitch.tv/helix/streams", headers=header).json()
+    getDetails: dict = httpx.get("https://api.twitch.tv/helix/streams", headers=header).json()
     showTopStreamerData(top_streamer_data, getDetails['data']) 
 
-def loadClips(clips_data):
+def loadClips(clips_data: dict):
     """Sends a GET request to the Reddit API, to get a collection of top posts on r/livestreamfail, a popular twitch-related subreddit.
 
     After the request is sent, showTopClips() is called passing the empty dictionary..
@@ -240,10 +249,10 @@ def loadClips(clips_data):
         None
     """
 
-    getDetails = httpx.get("https://www.reddit.com/r/livestreamfail/hot.json?limit=20").json()
+    getDetails: dict = httpx.get("https://www.reddit.com/r/livestreamfail/hot.json?limit=20").json()
     showTopClips(clips_data, getDetails['data']) 
 
-def loadStreamers(header, streamer_list, streamer_data):
+def loadStreamers(header: dict[str, str], streamer_list: dict[str, str], streamer_data: dict):
     """Loads the streamers which will be rendered on the /dashboard/ part of the web app.
 
     The function creates two lists: a list of live streamers, and not live streamers, as both have to be rendered,
@@ -263,15 +272,15 @@ def loadStreamers(header, streamer_list, streamer_data):
         None
     """
 
-    stream_url = "https://api.twitch.tv/helix/streams?"
-    liveStreamers = []
-    notLiveStreamers = []
+    stream_url: str = "https://api.twitch.tv/helix/streams?"
+    liveStreamers: list = []
+    notLiveStreamers: list = []
 
     for streamer in streamer_list:
         stream_url += "user_login=" + streamer + "&"
 
     getDetails = httpx.get(stream_url, headers=header)
-    getDetailsJSON = getDetails.json()
+    getDetailsJSON: dict = getDetails.json()
 
     for n in getDetailsJSON['data']:
         if n['user_name'].isascii():
@@ -285,7 +294,7 @@ def loadStreamers(header, streamer_list, streamer_data):
 
     showStreamerData(streamer_data, getDetailsJSON['data'], notLiveStreamers)
 
-def showStreamerData(streamer_data, getDetailsJSON, notLiveStreamers):
+def showStreamerData(streamer_data: dict, getDetailsJSON: dict, notLiveStreamers: list[str]) -> dict[str, list]:
     """This function ensures that the streamer data dictionary passed through is populated.
 
     It loops through the jsonified returned request and again, it checks whether it is ascii compatible,
@@ -321,7 +330,7 @@ def showStreamerData(streamer_data, getDetailsJSON, notLiveStreamers):
 
     return streamer_data
 
-def showTopStreamerData(top_streamer_data, getDetailsJSON):
+def showTopStreamerData(top_streamer_data: dict, getDetailsJSON: dict):
     """This function ensures that the top streamer data dictionary passed through is populated.
 
     It loops through the jsonified returned request and again, it checks whether it is ascii compatible,
@@ -343,7 +352,7 @@ def showTopStreamerData(top_streamer_data, getDetailsJSON):
         else:
             top_streamer_data[n['user_login']] = ["LIVE", n["game_name"], epochConversion(data = n)]
 
-def showTopClips(clips_data, getDetails):
+def showTopClips(clips_data: dict, getDetails: dict):
     """This function ensures that clips data dictionary passed through is populated.
 
     It loops through the request object returned by the GET request, and populates the clips_data dictionary with the relevant information.
@@ -358,7 +367,7 @@ def showTopClips(clips_data, getDetails):
     for n in getDetails['children']:
         clips_data[n["data"]["title"]] = [n["data"]["permalink"], n["data"]["score"], n["data"]["num_comments"]]
 
-async def indexStreamerData(header, streamer_list, streamer_data):
+async def indexStreamerData(header: dict[str, str], streamer_list: dict[str, str], streamer_data: dict):
     """Asynchronously indexes streamer data, to ensure faster loading times.
 
     Using async, it loops through the list of streamer and checks whether they exists by querying MongoDB with the name of the streamer,
@@ -368,7 +377,7 @@ async def indexStreamerData(header, streamer_list, streamer_data):
 
     Args:
         header: A header holding the token generated by Twitch.
-        streamer_list: A dictionary holding streamers' information, with the username as keys and a list of values per user.
+        streamer_list: A dictionary holding streamers' information, with the username as keys and the streamer URL as their respective value.
         streamer_data: An empty dictionary which will be populated.
 
     Returns:
@@ -382,13 +391,13 @@ async def indexStreamerData(header, streamer_list, streamer_data):
             if streamerExists:
                 pass
             else:
-                stream_url = "https://api.twitch.tv/helix/search/channels?query=" + streamer
+                stream_url: str = "https://api.twitch.tv/helix/search/channels?query=" + streamer
                 getDetails = await client.get(stream_url, headers=header)
-                getDetailsJSON = getDetails.json()
-                results = len(getDetailsJSON["data"])
+                getDetailsJSON: dict = getDetails.json()
+                results: int = len(getDetailsJSON["data"])
                 indexStreamer(results, streamer_data, getDetailsJSON, streamer)
 
-def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
+def indexStreamer(results: int, streamer_data: dict, getDetailsJSON: dict, streamer: str) -> dict[str, list]:
     """Indexes the streamer data.
 
     Loops through an arbitrary number of times, depending on the length of results passed through. Due to the way Twitch API works,
@@ -429,7 +438,7 @@ def indexStreamer(results, streamer_data, getDetailsJSON, streamer):
     
     return streamer_data
 
-def getVOD(streamer):
+def getVOD(streamer: str) -> dict[int, list]:
     """Gets VOD data from a specific streamer that is passed through as an argument.
 
     As usual, it generates a token, and then proceeds to send two GET requests to Twitch, 
@@ -453,23 +462,23 @@ def getVOD(streamer):
         IndexError: This usually occurs when the streamer has < 20 vods available.
     """
 
-    vod_data = {}
-    header = generateToken("bearer")
+    vod_data: dict = {}
+    header: dict[str, str] = generateToken("bearer")
 
-    userIDURL = f"https://api.twitch.tv/helix/users?login={streamer}"
-    requestID = httpx.get(userIDURL, headers=header).json()["data"][0]["id"]
+    userIDURL: str = f"https://api.twitch.tv/helix/users?login={streamer}"
+    requestID: int = httpx.get(userIDURL, headers=header).json()["data"][0]["id"]
 
-    findVideoURL = f"https://api.twitch.tv/helix/videos?user_id={requestID}&type=archive"
-    responseC = httpx.get(findVideoURL, headers=header)
+    findVideoURL: str = f"https://api.twitch.tv/helix/videos?user_id={requestID}&type=archive"
+    responseC: int = httpx.get(findVideoURL, headers=header)
 
     try:
         for n in range(20):
-            thumbnail_url = responseC.json()["data"][n]["thumbnail_url"]
-            vod_url = responseC.json()["data"][n]["url"]
-            title = responseC.json()["data"][n]["title"]
-            duration = responseC.json()["data"][n]["duration"]
-            creation = responseC.json()["data"][n]["created_at"]
-            view_count = responseC.json()["data"][n]["view_count"]
+            thumbnail_url: str = responseC.json()["data"][n]["thumbnail_url"]
+            vod_url: str = responseC.json()["data"][n]["url"]
+            title: str = responseC.json()["data"][n]["title"]
+            duration: str = responseC.json()["data"][n]["duration"]
+            creation: str = responseC.json()["data"][n]["created_at"]
+            view_count: str = responseC.json()["data"][n]["view_count"]
             if thumbnail_url == "":
                 vod_data[n] = ["https://ffwallpaper.com/card/tv-static/tv-static--12.jpg", vod_url, title, duration, dateConversion(creation), ("{:,}".format(view_count))]
             else:
@@ -480,7 +489,7 @@ def getVOD(streamer):
     
     return vod_data
 
-def getStreamerID(header, streamerUsername):
+def getStreamerID(header: dict[str, str], streamerUsername: str) -> int:
     """Gets a streamer ID from the streamer username.
 
     Sends a GET request to Twitch and retrives the id returned.
@@ -499,14 +508,15 @@ def getStreamerID(header, streamerUsername):
     Raises:
         IndexError: This usually occurs when for some reasons no id is available at index 0.
     """
-    getDetails = httpx.get(f"https://api.twitch.tv/helix/users?login={streamerUsername}", headers=header).json()
+
+    getDetails: dict = httpx.get(f"https://api.twitch.tv/helix/users?login={streamerUsername}", headers=header).json()
 
     try:
         return getDetails["data"][0]["id"]
     except IndexError:
         return 0
 
-def getClips(header, bID):
+def getClips(header: dict[str, str], bID: int) -> list[list]:
     """Gets clips from a specific twitch streamer.
 
     If the bID passed through is equal to 0, then an empty list is returned (it's only equal to 0 if an ID cannot be found, usually in the case of
@@ -526,19 +536,19 @@ def getClips(header, bID):
         ]
     """
     
-    clipList = []
+    clipList: list = []
 
     if bID == 0:
         return clipList
     else:
-        getDetails = httpx.get(f"https://api.twitch.tv/helix/clips?broadcaster_id={bID}&first=3", headers=header).json()
+        getDetails: dict = httpx.get(f"https://api.twitch.tv/helix/clips?broadcaster_id={bID}&first=3", headers=header).json()
 
     for i in getDetails['data']:
         clipList.append([("{:,}".format(i['view_count'])), i['duration'], i['title'], dateConversion(i['created_at']), i['url'], i['thumbnail_url']])
 
     return clipList
 
-def getData(streamer):
+def getData(streamer: str)-> dict[str, list]:
     """Gets streamer data.
 
     This function takes in a streamer username, and stores certain data returned from the Twitchtracker API, such as their follower counts, max attained viwers in the last 30 days,
@@ -559,8 +569,8 @@ def getData(streamer):
         KeyError: An error is raised if the key is not in the dictionary.
     """
 
-    streamerDict = {}
-    getDetails = httpx.get(f"https://twitchtracker.com/api/channels/summary/{streamer}", headers={'User-Agent': 'Chrome'}).json()
+    streamerDict: dict = {}
+    getDetails: dict = httpx.get(f"https://twitchtracker.com/api/channels/summary/{streamer}", headers={'User-Agent': 'Chrome'}).json()
 
     try:
         streamerDict[streamer] = [getDetails['rank'], ("{:,}".format(getDetails['avg_viewers'])), ("{:,}".format(getDetails['max_viewers'])), 
@@ -570,7 +580,7 @@ def getData(streamer):
 
     return streamerDict
 
-def getBans(streamer):
+def getBans(streamer: str) -> dict:
     """Gets ban information about a specific streamer.
 
     This function sends a GET request to streamerbans with a specific name and scrapes the data of the website, which in turn
@@ -591,10 +601,10 @@ def getBans(streamer):
         IndexError: Can be raised under multiple conditions, whether a specific css class is not found.
     """
 
-    bansDict = {}
-    banInformation = []
-    getBanStatus = ""
-    getDetails = httpx.get(f"https://streamerbans.com/user/{streamer}").text
+    bansDict: dict = {}
+    banInformation: list = []
+    getBanStatus: str = ""
+    getDetails: str = httpx.get(f"https://streamerbans.com/user/{streamer}").text
 
     try:
         bs4Obj = BeautifulSoup(getDetails, 'lxml')
@@ -623,7 +633,7 @@ def getBans(streamer):
 
     return bansDict
 
-def epochConversion(**kwargs):
+def epochConversion(**kwargs: dict):
     """Converts time to a specific format.
 
     This function takes in a 'kwargs' argument, which is an optional argument which takes in an arbitrary number of keyword arguments,
@@ -641,8 +651,6 @@ def epochConversion(**kwargs):
         KeyError: A KeyError is raised when the kwargs['jsonData']['data'] is not found.
     """
 
-    print(kwargs)
-
     try:
         twitch_api_date_parsed = parser.parse(kwargs['jsonData']["data"][kwargs['index']]["started_at"]).strftime("%d.%m.%Y %H:%M:%S")
     except KeyError: 
@@ -652,7 +660,7 @@ def epochConversion(**kwargs):
     epochDifference = epochCurrent - int(time.mktime(time.strptime(twitch_api_date_parsed, "%d.%m.%Y %H:%M:%S")))
     return str(datetime.timedelta(seconds = epochDifference))
 
-def dateConversion(created_at):
+def dateConversion(created_at: str):
     """Converts time to a specific format.
 
     This function sets a specific formatter, proceeds to create an object with that format given a date and returns it.
@@ -666,7 +674,7 @@ def dateConversion(created_at):
         15 Dec, 11:40
     """
 
-    formatter = '%Y-%m-%dT%H:%M:%SZ'
+    formatter: str = '%Y-%m-%dT%H:%M:%SZ'
     dtobj = datetime.datetime.strptime(created_at, formatter)
     convertedDate = dtobj.strftime("%#d %b, %H:%M")
 
