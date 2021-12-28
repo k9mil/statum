@@ -181,7 +181,11 @@ def twitch_login(header):
 
     for value in range(streamersFollowed):
         streamerName = followRequest["data"][value]["to_name"]
-        streamer_list[streamerName] = f"https://twitch.tv/{streamerName}"
+        if streamerName.isascii():
+            streamer_list[streamerName] = f"https://twitch.tv/{streamerName}"
+        else:
+            streamerName = followRequest["data"][value]["to_login"]
+            streamer_list[streamerName] = f"https://twitch.tv/{streamerName}"
     
     User().twitchSignup(user_data_id, streamer_list)
     return streamer_list 
@@ -628,6 +632,8 @@ def epochConversion(**kwargs):
 
         0:02:02
     """
+
+    print(kwargs)
 
     if not kwargs['data']:
         twitch_api_date_parsed = parser.parse(kwargs['jsonData']["data"][kwargs['index']]["started_at"]).strftime("%d.%m.%Y %H:%M:%S")
