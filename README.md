@@ -2,6 +2,18 @@
 
 statum, a small side project, is a web app built in Flask which serves as a tool to make the usage of Twitch more enjoyable, with unique features & the ability to get in-depth information of your most beloved streamers.
 
+## Preview 👓
+
+Below you can see a few screenshots from the current UI, though subject to change.
+
+Home Page             |  Dashboard
+:-------------------------:|:-------------------------:
+![Home Page](https://i.imgur.com/NqqKMH1.jpg)  |  ![Dashboard](https://i.imgur.com/SVqe6y2.jpg)
+Random             |  VODs
+![Random](https://i.imgur.com/fG35xjo.jpg)  |  ![VODs](https://i.imgur.com/gJdQ4wb.jpg)
+Streamer Page | TBD
+![Streamer Page](https://i.imgur.com/HdRLSOU.jpeg)
+
 ## Features 😂
 
 - Incorporated Twitch OAuth which allows for your followers to be loaded instantaneously.
@@ -21,7 +33,7 @@ The backlog of the features yet to be implemented are available on a public Trel
 
 ## Demo Server 💻
 
-A demo server is available, on a Heroku deno: [statoom](https://statoom.herokuapp.com/).
+A demo server is available, on a Heroku deno: [statoom](https://statoom.herokuapp.com/). *note: may or may not be up-to-date.
 
 ## Installation process 🤓
 
@@ -39,18 +51,6 @@ As for now, [Python](https://www.python.org/) is **necessary** for you to be abl
 8. Run the flask web app via "flask run". 
 
 After that, you're set.
-
-## Preview 👓
-
-Below you can see a few screenshots from the current UI, though subject to change.
-
-Home Page             |  Dashboard
-:-------------------------:|:-------------------------:
-![Home Page](https://i.imgur.com/NqqKMH1.jpg)  |  ![Dashboard](https://i.imgur.com/SVqe6y2.jpg)
-Random             |  VODs
-![Random](https://i.imgur.com/fG35xjo.jpg)  |  ![VODs](https://i.imgur.com/gJdQ4wb.jpg)
-Streamer Page | TBD
-![Streamer Page](https://i.imgur.com/HdRLSOU.jpeg)
 
 ## Contributing 🤠
 

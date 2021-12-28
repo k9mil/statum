@@ -38,7 +38,6 @@ async def dashboard():
     except UnboundLocalError:
         return redirect(url_for("main.index"))
 
-    print(favourites)
     return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, favourites=favourites, login_url=Config.LOGIN_URL)
 
 @main.route("/vod/<streamer_name>")
@@ -80,7 +79,9 @@ def favourite(streamer_name):
 
 @main.route("/settings")
 def settings():
-    return render_template("settings.html", login_url=Config.LOGIN_URL)
+    user_data_id: int = session["user"]["_id"]
+    favourites = User.loadFavourites(user_data_id)
+    return render_template("settings.html", favourites=favourites, login_url=Config.LOGIN_URL)
 
 @main.route("/random")
 def randomHTML():

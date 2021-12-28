@@ -58,12 +58,12 @@ class User:
             return self.startSession(user)
 
     def addDeleteFavourites(user_id: int, streamer_name: str):
-        """Adds a favourite streamer to the user id.
+        """Adds/deleted a favourite streamer to the user id.
 
         A query is made to see whether the user exists, if it does, it finds the users' object
         in the 'twitch_user_data' table, and pushes the streamer that is favourited
-        onto the database object. It also ensures that the favourite does not already
-        exist in the users' object.
+        onto the database object. If it does exist, it acts as the inverse and deleted
+        the streamer from the favourites.
 
         Args:
             user_id: A user (id) which serves as a unique identifier.

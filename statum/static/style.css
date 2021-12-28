@@ -494,6 +494,35 @@ a {
     color: #6441a5;
 }
 
+/* Settings Area */
+
+.settings-area {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+}
+
+.setting-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 2rem;
+}
+
+.setting-1-header h1 {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    margin-bottom: 2rem;
+}
+
+.setting-1-list h2 {
+    font-size: 14px;
+    font-weight: normal;
+    color: rgb(190, 190, 200);
+    line-height: 2rem;
+}
+
 /* Errors */
 
 .error__area {

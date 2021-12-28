@@ -1,4 +1,15 @@
 {% extends "./base/base.html" %}
 {% block top %}
-    <h1>settings.</h1>
+    <div class="settings-area">
+        <div class="setting-1">
+            <div class="setting-1-header">
+                <h1>List of Favourite Streamers:</h1>
+            </div>
+            <div class="setting-1-list">
+                {% for streamer in favourites %}
+                    <h2>{{ streamer }}</h2>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
