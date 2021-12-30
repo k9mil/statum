@@ -232,7 +232,29 @@ def loadTopStreamers(header: dict[str, str], top_streamer_data: dict):
     """
 
     getDetails: dict = httpx.get("https://api.twitch.tv/helix/streams", headers=header).json()
+    indexTopStreamerData(getDetails['data'])
     showTopStreamerData(top_streamer_data, getDetails['data']) 
+
+def indexTopStreamerData(streamer_data: dict):
+    """This function indexes top streamers into the database.
+
+    Considering that we do not have to traverse a query, this directly returns an id & the username,
+    so it can be indexed in an independent function. This is necessary as we allow the user
+    to have favourites outside of followed users, which allows for quicker loading times if we
+    connect the id to the username.
+
+    This function loops over the returned data from Twitch and indexes the streamers to the database.
+
+    Args:
+        streamer_data: The dictionary returned by Twitch containing streamer details.
+
+    Returns:
+        None
+
+    """
+
+    for n in range(len(streamer_data)):
+        System().indexStreamer(streamer_data[n]["user_id"], streamer_data[n]["user_login"])
 
 def loadClips(clips_data: dict):
     """Sends a GET request to the Reddit API, to get a collection of top posts on r/livestreamfail, a popular twitch-related subreddit.
@@ -349,6 +371,8 @@ def showTopStreamerData(top_streamer_data: dict, getDetailsJSON: dict):
         else:
             top_streamer_data[n['user_login']] = ["LIVE", n["game_name"], epochConversion(data = n)]
 
+    print(top_streamer_data)
+
 def showTopClips(clips_data: dict, getDetails: dict):
     """This function ensures that clips data dictionary passed through is populated.
 
@@ -462,11 +486,16 @@ def getVOD(streamer: str, *multipleStreamers: str) -> dict[int, list]:
     vod_data: dict = {}
     header: dict[str, str] = generateToken("bearer")
 
-    userIDURL: str = f"https://api.twitch.tv/helix/users?login={streamer}"
-    requestID: int = httpx.get(userIDURL, headers=header).json()["data"][0]["id"]
+    loadStreamerID = System.loadID(streamer)
 
+    if loadStreamerID == None:
+        userIDURL: str = f"https://api.twitch.tv/helix/users?login={streamer}"
+        requestID: int = httpx.get(userIDURL, headers=header).json()["data"][0]["id"]
+    else:
+        requestID = loadStreamerID['_id']
+    
     findVideoURL: str = f"https://api.twitch.tv/helix/videos?user_id={requestID}&type=archive"
-    responseC: int = httpx.get(findVideoURL, headers=header)
+    responseC: dict = httpx.get(findVideoURL, headers=header)
 
     loopLength: int = 0
 

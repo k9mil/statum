@@ -76,3 +76,27 @@ class System:
             return database["random_streamer_data"].find_one()
         else:
             pass
+    
+    def loadID(streamer: str) -> id:
+        """Loads the equivalent ID of an indexed streamer in the database.
+
+        Contains a single line, returns an object where the streamer is matched,
+        if it is matched it returns an object with the id & name, otherwise
+        returns 'None' by default.
+
+        Args:
+            streamer: The streamer which the ID is to be searched for
+
+        Returns:
+            An object/dictionary is returned via MongoDB where the streamer is found. For example:
+
+            {
+                '_id': '87204022', 'broadcaster_name': 'disguisedtoast'
+            }
+        """
+
+        return database.twitch_streamer_data.find_one(
+            {
+                'broadcaster_name': streamer.lower()
+            }
+        )
