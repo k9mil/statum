@@ -452,35 +452,41 @@ def indexStreamer(results: int, streamer_data: dict, getDetailsJSON: dict, strea
     
     return streamer_data
 
-def getVOD(streamer: str, *multipleStreamers: str) -> dict[int, list]:
+async def getVOD(header: dict[str,str], streamer: str, *multipleStreamers: str) -> dict[int, list]:
     """Gets VOD data from a specific streamer that is passed through as an argument.
 
-    As usual, it generates a token, and depending on the result of a database check whether the users' are indexed,
-    if they are not then it proceeds to send two GET requests to Twitch, one which retrieves 
-    the id for the streamer and the other one which gets the users' videos (vods).
-    It then proceeds to loop through a set number of 20 times and assign the logical retrieved data to variables,
-    and lastly assign then to a dictionary which will be returned.
-
-    Also checkes whether *args are passed, if so, the length of the loop is diminished to 3 rather than 20 by default.
+    This asynchronous function starts of by checking whether *multipleStreamers is passed, if so, the length of the loop
+    is diminished to 3 rather than 20 which is by default. It then sends a query via loadID() to check if the streamer
+    is indexed as an ID is necessary for this function, if not then it finds the id. It then asynchronously gets
+    the videos for each streamer passed through.
 
     Args:
+        header: A header necessary for getting the data from Twitch.
         streamer: Contains a string of the streamer name.
+        *multipleStreamers: An optional arg, determines whether it's for a single streamer or multiple, which in turn determines the number of VODs to be found.
 
     Returns:
-        A dict mapping keys to the corresponding values, with the keys being a number ranging
-        from 0 to 20, and the data being a list of values. For example:
+        It returns a list of lists with each list containing data for a specific video. For example:
 
-        {
-            0: ['https://ffwallpaper.com/card/tv-static/tv-static--12.jpg', 'https://www.twitch.tv/videos/1243998438', 
-            'DIA DE RAFT E NBA! !sorteio - Siga @Gaules nas redes sociais', '25h46m2s', '26 Dec, 17:21', '7,751']
-        }
-    
-    Raises:
-        IndexError: This usually occurs when the streamer has < 20 vods available.
+        [
+            [
+                'https://static-cdn.jtvnw.net/cf_vods/dgeft87wbj63p/ea762441364c25cb372d_bobross_44181880156_1640535689//thumb/thumb0-1920x1080.jpg', 
+                'https://www.twitch.tv/videos/1243955144', 
+                'Weekend Marathon! Beginning Fridays at 12pm ET.', 
+                '24h46m34s', 
+                '26 Dec, 16:21', 
+                '123,236', 
+                'BobRoss'
+            ]
+        ]
     """
 
     vod_data: list = []
-    header: dict[str, str] = generateToken("bearer")
+    loopLength: int = 0
+
+    if multipleStreamers:
+        loopLength = 3
+    else: loopLength = 20
 
     loadStreamerID = System.loadID(streamer)
 
@@ -490,14 +496,44 @@ def getVOD(streamer: str, *multipleStreamers: str) -> dict[int, list]:
     else:
         requestID = loadStreamerID['_id']
     
-    findVideoURL: str = f"https://api.twitch.tv/helix/videos?user_id={requestID}&type=archive"
-    responseC: dict = httpx.get(findVideoURL, headers=header)
+    async with httpx.AsyncClient() as client:
+        findVideoURL: str = f"https://api.twitch.tv/helix/videos?user_id={requestID}&type=archive"
+        responseC: dict = await client.get(findVideoURL, headers=header)
+        data = indexVOD(loopLength, responseC, vod_data)
+    
+    return data
 
-    loopLength: int = 0
+def indexVOD(loopLength: int, responseC: dict, vod_data: list) -> list[list]:
+    """This function aggregates the data from the Twitch object.
 
-    if multipleStreamers:
-        loopLength = 3
-    else: loopLength = 20
+    It loops over either 3, or 20 times, and fills in a list per video found with the details necessary.
+    If a thumbnail_url is not found (usually, in the case of a livestream still going on), it sets a default one
+    otherwise it gets it from the Twitch returned object. Lastly, appends the list to another list which
+    contains all of the data.
+
+    Args:
+        loopLength: The length of the for loop, decided by the optional arg in getVOD().
+        responseC: The Twitch object that is returned.
+        vod_data: A list which contains lists of data (the videos).
+
+    Returns:
+        It returns a list of lists with each list containing data for a specific video. For example:
+
+        [
+            [
+                'https://static-cdn.jtvnw.net/cf_vods/dgeft87wbj63p/ea762441364c25cb372d_bobross_44181880156_1640535689//thumb/thumb0-1920x1080.jpg', 
+                'https://www.twitch.tv/videos/1243955144', 
+                'Weekend Marathon! Beginning Fridays at 12pm ET.', 
+                '24h46m34s', 
+                '26 Dec, 16:21', 
+                '123,236', 
+                'BobRoss'
+            ]
+        ]
+        
+    Raises:
+        IndexError: This usually occurs when the streamer has <20 (or 3) vods available.
+    """
 
     try:
         for n in range(loopLength):
@@ -516,6 +552,7 @@ def getVOD(streamer: str, *multipleStreamers: str) -> dict[int, list]:
     except IndexError:
         pass
     
+    print(vod_data)
     return vod_data
 
 def sortVOD(vod_data):

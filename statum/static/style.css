@@ -313,6 +313,12 @@ a {
     white-space: nowrap;
 }
 
+.vod-object .vod-title-bottom-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .vod-middle {
     max-width: 33.3%;
 }

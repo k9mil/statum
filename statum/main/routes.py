@@ -41,7 +41,8 @@ async def dashboard():
 
 @main.route("/vod/<streamer_name>")
 def vod(streamer_name):
-    vod_data = getVOD(streamer_name)
+    header: dict[str, str] = generateToken("bearer")
+    vod_data = getVOD(header, streamer_name)
     vodLength = len(vod_data)
     if vodLength > 1:
         return render_template("vod.html", vod_data=vod_data, streamer=streamer_name, vodLength = vodLength)
@@ -82,14 +83,15 @@ def settings():
     return render_template("settings.html", favourites=favourites, login_url=Config.LOGIN_URL)
 
 @main.route("/favourites")
-def favourites():
+async def favourites():
     user_data_id: int = session["user"]["_id"]
+    header: dict[str, str] = generateToken("bearer")
     favourites = User.loadFavourites(user_data_id)
     vodLength: int = 0
     vodConglomerate = []
 
     for streamer in favourites:
-        vod_data = getVOD(streamer, "multiple")  
+        vod_data = await getVOD(header, streamer, "multiple")  
         vodLength += len(vod_data)
         for n in vod_data:
             vodConglomerate.append(n)

@@ -11,15 +11,20 @@
                         <div class="vod-data">
                             <img src="{{vod_data[n][0]}}" width="200" height="200">
                             <div class="vod-time">
-                                <h1 class="time">{{vod_data[n][3]}}</h1>
+                                <h1 class="time">{{vod_data[n][3]}}</h1> 
                             </div>
                             <div class="vod-views">
                                 <h1 class="views">{{vod_data[n][5]}} views</h1>
                             </div>
                         </div>
                         <div class="vod-title">
-                            <h1>{{vod_data[n][2]}}</h1>
-                            <h2>{{vod_data[n][4]}}</h2>
+                            <div class="vod-title-top-area">
+                                <h1>{{vod_data[n][2]}}</h1>
+                            </div>
+                            <div class="vod-title-bottom-area">
+                                <h2>{{vod_data[n][4]}}</h2>
+                                <h2 class="username">{{vod_data[n][6]}}</h2>
+                            </div>
                         </div>
                     </div>
                 </a>
