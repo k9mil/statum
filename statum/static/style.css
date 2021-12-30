@@ -51,7 +51,7 @@ body {
 .top-area .top-header h1 {
     font-weight: 500;
     font-size: 0.9rem;
-    color: rgb(255, 255, 255);
+    color: #6441a5;
 }
 
 .top-area .top-header h2 {
@@ -72,6 +72,20 @@ body {
 
 .top-area .top-header a:hover {
     color: #6441a5;
+}
+
+@media screen and (max-width: 768px) {
+    .top-area .top-header h1 {
+        font-size: 0.8rem;
+    }
+
+    .top-area .top-header h2 {
+        font-size: 3rem;
+    }
+
+    .top-area .top-header h3 {
+        font-size: 1rem;
+    }
 }
 
 /* Streamer area */
