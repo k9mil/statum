@@ -112,6 +112,19 @@ body {
     color: rgb(255, 255, 255);
 }
 
+@media screen and (max-width: 768px) {
+    .streamer-area {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 0 auto;
+    }
+
+    .streamer-area .div-streamer h1 {
+        font-size: 14px;
+    }
+}
+
 /* Dashboard Area */
 
 .area {
@@ -119,12 +132,15 @@ body {
     flex-direction: column;
     flex: 1 1 0px;
     justify-content: top;
-    min-height: 100%;
 }
 
 .area .title-header {
     text-align: center;
     margin-top: 2rem;
+}
+
+.area .title-header h1 {
+    font-size: 2rem;
 }
 
 .clip-area {
@@ -142,10 +158,13 @@ body {
     font-size: 16px;
 }
 
+.icons {
+    margin-right: 1rem;
+}
+
 .icons img {
     width: 24px;
     height: 24px;
-    margin-right: 1rem;
 }
 
 .live {
@@ -159,6 +178,35 @@ body {
 a {
     text-decoration: none;
     color: rgb(255, 255, 255);
+}
+
+@media screen and (max-width: 768px) {
+    .area {
+        display: flex;
+        flex-direction: column;
+        justify-content: top;
+        flex: 0;
+    }
+    
+    .area .title-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .icons img,
+    img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .clip-area .clip-comments h2 {
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .area {
+        min-height: 100%;
+    }
 }
 
 /* Vod Results */
