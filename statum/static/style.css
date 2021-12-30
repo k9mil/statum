@@ -251,7 +251,8 @@ a {
     }
 }
 
-.vod-object {
+.vod-object,
+.clip-object {
     border: 0 solid;
     border-width: 1px;
     border-radius: 0.5rem;
@@ -265,18 +266,21 @@ a {
     overflow: hidden;
 }
 
-.vod-object .vod-object-top {
+.vod-object .vod-object-top,
+.individual-streamer-area-right .clip-area .clip-object .vod-object-top {
     position: relative;
     height: 11rem;
 }
 
-.vod-object .vod-object-top img {
+.vod-object .vod-object-top img,
+.individual-streamer-area-right .clip-area .clip-object .vod-object-top img {
     height: 100%;
     width: 100%;
     object-fit: cover;
 }
 
-.vod-object .vod-object-top .views-text {
+.vod-object .vod-object-top .views-text,
+.individual-streamer-area-right .clip-area .clip-object .views-text {
     --tw-bg-opacity: 1;
     background-color: rgba(5, 5, 9, 0.6);
     border-radius: 9999px;
@@ -289,7 +293,8 @@ a {
     left: 0.5rem;
 }
 
-.vod-object .vod-object-top .length-text {
+.vod-object .vod-object-top .length-text,
+.individual-streamer-area-right .clip-area .clip-object .vod-object-top .length-text {
     --tw-bg-opacity: 1;
     background-color: rgba(5, 5, 9, 0.6);
     border-radius: 9999px;
@@ -302,7 +307,8 @@ a {
     right: 0.5rem;
 }
 
-.vod-object .vod-object-bottom {
+.vod-object .vod-object-bottom,
+.individual-streamer-area-right .clip-area .clip-object .vod-object-bottom {
     height: 5rem;
     padding: 0.75rem;
     display: flex;
@@ -310,13 +316,16 @@ a {
     justify-content: center;
 }
 
-.vod-object .vod-object-bottom h3 {
+.vod-object .vod-object-bottom h3,
+.individual-streamer-area-right .clip-area .clip-object .vod-object-bottom h3 {
     font-weight: 700;
     font-size: 12px;
 }
 
 .vod-object .vod-object-bottom h4,
-.vod-object .vod-object-bottom h5 {
+.vod-object .vod-object-bottom h5,
+.individual-streamer-area-right .clip-area .clip-object .vod-object-bottom h4,
+.individual-streamer-area-right .clip-area .clip-object .vod-object-bottom h5 {
     font-size: 10px;
     font-weight: normal;
 }
@@ -371,16 +380,52 @@ a {
     flex: 1 1 0px;
 }
 
-.individual-streamer-area-left,
-.individual-streamer-area-middle,
-.individual-streamer-area-right {
-    display: flex;
-    flex-direction: column;
-    width: 33.3%;
+@media (max-width: 768px) {
+    .individual-streamer-area {
+        flex-direction: column;
+    }
 }
 
-.individual-streamer-area-right h1 {
+.individual-streamer-area-left,
+.individual-streamer-area-middle {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+.individual-streamer-area-right {
+    width: 20%;
+}
+
+@media (max-width: 1440px) {
+    .individual-streamer-area-left,
+    .individual-streamer-area-middle,
+    .individual-streamer-area-right {
+        width: 33.3%;
+    }
+}
+
+@media (max-width: 768px) {
+    .individual-streamer-area-left,
+    .individual-streamer-area-middle,
+    .individual-streamer-area-right {
+        width: 100%;
+    }
+}
+
+.isa-clips-header h1,
+.isa-bans-header h1,
+.isa-faq-header h1 {
     font-size: 24px;
+}
+
+.individual-streamer-area .clip-area {
+    display: flex;
+    flex-direction: column;
+}
+
+.clip-object {
+    margin: 2.5rem;
 }
 
 .isa-faq-header,
@@ -421,6 +466,36 @@ a {
     margin-top: 2rem;
     line-height: 1.5rem;
     color: rgb(190, 190, 200)
+}
+
+@media (max-width: 768px) {
+    .data-point {
+        padding: 2rem;
+        border: 0 solid;
+        border-width: 1px;
+        border-radius: .375rem;
+        border-color: rgba(31,41,55);
+        margin: 2.5rem;
+    }
+    
+    .data-point h1 {
+        font-size: 14px;
+        color: rgb(255, 255, 255);
+    }
+    
+    .data-point h2 {
+        font-size: 12px;
+        font-weight: normal;
+        margin-top: 2rem;
+        line-height: 1.5rem;
+        color: rgb(190, 190, 200)
+    }
+
+    .isa-clips-header h1,
+    .isa-bans-header h1,
+    .isa-faq-header h1 {
+        font-size: 18px;
+    }
 }
 
 /* TOS area */

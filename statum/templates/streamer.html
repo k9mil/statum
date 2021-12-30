@@ -82,32 +82,28 @@
                 </div>
             </div>
         </div>
-        <div class="individual-streamer-area-right">
-            <div class="isa-clips-header">
-                <h1 class="gradient-color">top clips.</h1>
-            </div>
-            <div class="isa-clips">
-                {% if top_clips %}
-                    {% for n in range(clip_length) %}
-                        <a href="{{ top_clips[n][4] }}" target="_blank">
-                            <div class="vod-object isa-clip-object">
-                                <div class="vod-data">
-                                    <img src="{{top_clips[n][5] }}" width="200" height="200">
-                                    <div class="vod-time">
-                                        <h1 class="time">{{top_clips[n][1]}}s</h1>
-                                    </div>
-                                    <div class="vod-views">
-                                        <h1 class="views">{{top_clips[n][0]}} views</h1>
-                                    </div>
-                                </div>
-                                <div class="vod-title">
-                                    <h1>{{ top_clips[n][2] }}</h1>
-                                    <h2>{{ top_clips[n][3] }}</h2>
-                                </div>
-                            </div>
-                        </a>
-                        {% endfor %}
-                {% endif %}
+    <div class="individual-streamer-area-right">
+        <div class="isa-clips-header">
+            <h1 class="gradient-color">top clips.</h1>
+        </div>
+        <div class="clip-area">
+            {% if top_clips %}
+                {% for n in range(clip_length) %}
+                    <a href="{{top_clips[n][4]}}" target="_blank">
+                    <div class="clip-object">
+                        <div class="vod-object-top">
+                            <img src="{{top_clips[n][5]}}"/>
+                            <span class="views-text">{{top_clips[n][0]}} views</span>
+                            <span class="length-text">{{top_clips[n][1]}} s</span>
+                        </div>
+                        <div class="vod-object-bottom">
+                            <h3>{{top_clips[n][2]}}</h3>
+                            <h4>{{top_clips[n][3]}}</h4>
+                        </div>
+                    </div>
+                    </a>
+                {% endfor %}
+            {% endif %}
             </div>
         </div>
     </div>
