@@ -3,28 +3,24 @@
     <div class="vod-top">
         <h1 class="vod-header gradient-color">latest {{streamer}} vods.</h1>
     </div>
-    <div class="vod-results">
+
+    <div class="div grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 px-3 md:px-20 py-3">
         {% if vod_data %}
             {% for n in range(vodLength) %}
-                <a href="{{vod_data[n][1]}}" target="_blank">
-                    <div class="vod-object">
-                        <div class="vod-data">
-                            <img src="{{vod_data[n][0]}}" width="200" height="200">
-                            <div class="vod-time">
-                                <h1 class="time">{{vod_data[n][3]}}</h1>
-                            </div>
-                            <div class="vod-views">
-                                <h1 class="views">{{vod_data[n][5]}} views</h1>
-                            </div>
-                        </div>
-                        <div class="vod-title">
-                            <h1>{{vod_data[n][2]}}</h1>
-                            <h2>{{vod_data[n][4]}}</h2>
-                        </div>
+                <a href="google.com" target="_blank">
+                <div class="rounded-lg overflow-hidden bg-gray-200 h-64 text-sm">
+                    <div class="relative h-44">
+                        <img src="{{vod_data[n][0]}}" class="h-full w-full object-cover"/>
+                        <span class="bg-gray-100 rounded-full px-2 shadow absolute top-2 left-2">{{vod_data[n][5]}} views</span>
+                        <span class="bg-gray-100 rounded-full px-2 shadow absolute bottom-2 right-2">{{vod_data[n][3]}}</span>
                     </div>
+                    <div class="h-20 p-3 flex flex-col justify-center">
+                        <h3 class="font-bold">{{vod_data[n][2]}}</h3>
+                        <h4>{{vod_data[n][4]}}</h4>
+                    </div>
+                </div>
                 </a>
             {% endfor %}
-        {% else %}
         {% endif %}
     </div>
 {% endblock %}
