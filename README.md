@@ -1,6 +1,6 @@
 # What is statum? 🏗️
 
-statum, a small side project, is a web app built in Flask which serves as a tool to make the usage of Twitch more enjoyable, with unique features & the ability to get in-depth information of your most beloved streamers.
+statum, a side project, is a web app built in Python, Flask + MongoDB which serves as a tool to make the usage of Twitch more enjoyable, with unique features & the ability to get in-depth information of your most beloved streamers.
 
 ## Preview 👓
 
@@ -8,22 +8,24 @@ Below you can see a few screenshots from the current UI, though subject to chang
 
 Home Page             |  Dashboard
 :-------------------------:|:-------------------------:
-![Home Page](https://i.imgur.com/NqqKMH1.jpg)  |  ![Dashboard](https://i.imgur.com/SVqe6y2.jpg)
+![Home Page](https://i.imgur.com/NqqKMH1.jpg)  |  ![Dashboard](https://i.imgur.com/O1Qdh6s.jpg)
 Random             |  VODs
 ![Random](https://i.imgur.com/fG35xjo.jpg)  |  ![VODs](https://i.imgur.com/gJdQ4wb.jpg)
-Streamer Page | TBD
-![Streamer Page](https://i.imgur.com/HdRLSOU.jpeg)
+Streamer Page | Favourite VODs
+![Streamer Page](https://i.imgur.com/HdRLSOU.jpeg) | ![favVODs](https://i.imgur.com/f749eUY.jpg)
 
 ## Features 😂
 
 - Incorporated Twitch OAuth which allows for your followers to be loaded instantaneously.
 - Ability to view a random twitch stream between 10 and 100 viewers to help to support smaller streamers.
-- A aeshetically pleasing dashboard with a list of your followed streamers, top streamers & top circulating LSF clips.
+- An aeshetically pleasing dashboard with a list of your followed streamers, top streamers & top circulating LSF clips.
 - If the streamer is live, it displays the category they are in & length of stream.
 - List of VODs for each streamer.
 - List of the current most popular twitch clips, alongside with their metrics.
 - Unique Streamer Data insights for each streamer on the platform.
 - Utilization of MongoDB for indexing streamers to minimize the amount of requests & user sessions.
+- Ability to add streamers to favourites.
+- See VODs of your favourite streamers.
 
 & much more!
 
