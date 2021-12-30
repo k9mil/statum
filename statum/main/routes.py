@@ -4,7 +4,6 @@ from furl import furl
 from statum.system.models import System
 from statum.users.models import User
 from statum.main.utils.utils import generateToken, twitch_login, send_requests, getVOD, getClips, getStreamerID, getData, getBans, randomIndexedStream, randomStream, addToFavourites
-from statum import database
 
 main = Blueprint('main', __name__)
 
@@ -90,14 +89,13 @@ def favourites():
     vodConglomerate = []
 
     for streamer in favourites:
-        vod_data = getVOD(streamer, "multiple")
+        vod_data = getVOD(streamer, "multiple")  
         vodLength += len(vod_data)
-        vodConglomerate.append(vod_data)
-
-    print(vodConglomerate)
+        for n in vod_data:
+            vodConglomerate.append(n)
 
     if vodLength > 1:
-        return render_template("favourites.html", vod_data=vod_data, vodLength = vodLength)
+        return render_template("favourites.html", vod_data=vodConglomerate, vodLength = vodLength)
     else:
         return render_template("favourites.html")
 

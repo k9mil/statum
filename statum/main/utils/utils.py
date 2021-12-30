@@ -101,8 +101,6 @@ def indexRandom(getStreamsRequest: dict, streamerIDs: list[int]) -> list[int]:
         A list of the streamers, located in the "streamerIDs" variable.
     """
 
-    print(streamerIDs)
-
     requestInstances = len(getStreamsRequest["data"])
     for i in range(requestInstances):
         if getStreamsRequest['data'][i]['user_name'].isascii():
@@ -110,7 +108,6 @@ def indexRandom(getStreamsRequest: dict, streamerIDs: list[int]) -> list[int]:
         else:
             streamerIDs.append(getStreamsRequest['data'][i]['user_login'])
     
-    print(streamerIDs)
     return streamerIDs
 
 def chooseRandom(streamerIDs: list[int]) -> str:
@@ -122,8 +119,6 @@ def chooseRandom(streamerIDs: list[int]) -> str:
     Returns:
         None
     """
-
-    print(streamerIDs)
 
     return random.choice(streamerIDs)
 
@@ -371,8 +366,6 @@ def showTopStreamerData(top_streamer_data: dict, getDetailsJSON: dict):
         else:
             top_streamer_data[n['user_login']] = ["LIVE", n["game_name"], epochConversion(data = n)]
 
-    print(top_streamer_data)
-
 def showTopClips(clips_data: dict, getDetails: dict):
     """This function ensures that clips data dictionary passed through is populated.
 
@@ -462,10 +455,13 @@ def indexStreamer(results: int, streamer_data: dict, getDetailsJSON: dict, strea
 def getVOD(streamer: str, *multipleStreamers: str) -> dict[int, list]:
     """Gets VOD data from a specific streamer that is passed through as an argument.
 
-    As usual, it generates a token, and then proceeds to send two GET requests to Twitch, 
-    one which retrieves the id for the streamer and the other one which gets the users' videos (vods).
+    As usual, it generates a token, and depending on the result of a database check whether the users' are indexed,
+    if they are not then it proceeds to send two GET requests to Twitch, one which retrieves 
+    the id for the streamer and the other one which gets the users' videos (vods).
     It then proceeds to loop through a set number of 20 times and assign the logical retrieved data to variables,
     and lastly assign then to a dictionary which will be returned.
+
+    Also checkes whether *args are passed, if so, the length of the loop is diminished to 3 rather than 20 by default.
 
     Args:
         streamer: Contains a string of the streamer name.
@@ -483,7 +479,7 @@ def getVOD(streamer: str, *multipleStreamers: str) -> dict[int, list]:
         IndexError: This usually occurs when the streamer has < 20 vods available.
     """
 
-    vod_data: dict = {}
+    vod_data: list = []
     header: dict[str, str] = generateToken("bearer")
 
     loadStreamerID = System.loadID(streamer)
@@ -511,15 +507,22 @@ def getVOD(streamer: str, *multipleStreamers: str) -> dict[int, list]:
             duration: str = responseC.json()["data"][n]["duration"]
             creation: str = responseC.json()["data"][n]["created_at"]
             view_count: str = responseC.json()["data"][n]["view_count"]
+            username: str = responseC.json()["data"][n]["user_name"]
             if thumbnail_url == "":
-                vod_data[n] = ["https://ffwallpaper.com/card/tv-static/tv-static--12.jpg", vod_url, title, duration, dateConversion(creation), ("{:,}".format(view_count))]
+                vod_data.append(["https://ffwallpaper.com/card/tv-static/tv-static--12.jpg", vod_url, title, duration, dateConversion(creation), ("{:,}".format(view_count)), username])
             else:
                 thumbnail_url = thumbnail_url.replace("%{width}x%{height}.jpg", "1920x1080.jpg")
-                vod_data[n] = [thumbnail_url, vod_url, title, duration, dateConversion(creation), ("{:,}".format(view_count))]
+                vod_data.append([thumbnail_url, vod_url, title, duration, dateConversion(creation), ("{:,}".format(view_count)), username])
     except IndexError:
         pass
     
     return vod_data
+
+def sortVOD(vod_data):
+    """balls
+    """
+
+
 
 def getStreamerID(header: dict[str, str], streamerUsername: str) -> int:
     """Gets a streamer ID from the streamer username.
