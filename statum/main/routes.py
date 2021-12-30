@@ -3,7 +3,7 @@ from statum.config import Config
 from furl import furl
 from statum.system.models import System
 from statum.users.models import User
-from statum.main.utils.utils import generateToken, twitch_login, send_requests, getVOD, getClips, getStreamerID, getData, getBans, randomIndexedStream, randomStream, addToFavourites
+from statum.main.utils.utils import generateToken, twitch_login, send_requests, getVOD, getClips, getStreamerID, getData, getBans, randomIndexedStream, randomStream, addToFavourites, sortVOD
 
 main = Blueprint('main', __name__)
 
@@ -93,9 +93,9 @@ def favourites():
         vodLength += len(vod_data)
         for n in vod_data:
             vodConglomerate.append(n)
-
+    
     if vodLength > 1:
-        return render_template("favourites.html", vod_data=vodConglomerate, vodLength = vodLength)
+        return render_template("favourites.html", vod_data=sortVOD(vodConglomerate), vodLength = vodLength)
     else:
         return render_template("favourites.html")
 

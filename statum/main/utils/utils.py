@@ -519,9 +519,28 @@ def getVOD(streamer: str, *multipleStreamers: str) -> dict[int, list]:
     return vod_data
 
 def sortVOD(vod_data):
-    """balls
+    """Returns a sorted version of the list of lists by date descending.
+
+    Args:
+        vod_data: A list of lists containing data on the streams, incl. the date to be sorted.
+    
+    Returns:
+        It returns a list of lists sorted by date. For example:
+
+        [
+            [
+                "https://static-cdn.jtvnw.net/cf_vods/dgeft87wbj63p/6fb581a75082f57bca9e_bobross_44115748764_1639932593//thumb/thumb0-1920x1080.jpg",
+                "https://www.twitch.tv/videos/1237868145",
+                "Weekend Marathon! Beginning Fridays at 12pm ET.",
+                "24h15m36s",
+                "19 Dec, 16:50",
+                "107,471",
+                "BobRoss"
+            ]
+        ]
     """
 
+    return sorted(vod_data, key=lambda x: datetime.datetime.strptime(x[4], "%d %b, %H:%M"), reverse=True)
 
 
 def getStreamerID(header: dict[str, str], streamerUsername: str) -> int:
