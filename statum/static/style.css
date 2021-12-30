@@ -312,11 +312,19 @@ a {
 
 .vod-object .vod-object-bottom h3 {
     font-weight: 700;
-    margin-bottom: 0.75rem;
+    font-size: 12px;
 }
 
-.vod-object .vod-object-bottom h4 {
+.vod-object .vod-object-bottom h4,
+.vod-object .vod-object-bottom h5 {
+    font-size: 10px;
     font-weight: normal;
+}
+
+.vod-object .vod-object-bottom .date-and-username {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 /* Random Area */
