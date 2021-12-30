@@ -40,9 +40,9 @@ async def dashboard():
     return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, favourites=favourites, login_url=Config.LOGIN_URL)
 
 @main.route("/vod/<streamer_name>")
-def vod(streamer_name):
+async def vod(streamer_name):
     header: dict[str, str] = generateToken("bearer")
-    vod_data = getVOD(header, streamer_name)
+    vod_data = await getVOD(header, streamer_name)
     vodLength = len(vod_data)
     if vodLength > 1:
         return render_template("vod.html", vod_data=vod_data, streamer=streamer_name, vodLength = vodLength)

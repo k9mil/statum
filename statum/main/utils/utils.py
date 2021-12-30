@@ -552,7 +552,6 @@ def indexVOD(loopLength: int, responseC: dict, vod_data: list) -> list[list]:
     except IndexError:
         pass
     
-    print(vod_data)
     return vod_data
 
 def sortVOD(vod_data):
