@@ -1,7 +1,7 @@
 {% extends "./base/base.html" %}
 {% block top %}
     <div class="vod-top">
-        <h1 class="vod-header gradient-color">latest {{streamer}} vods.</h1>
+        <h1 class="vod-header gradient-color">latest favourite vods.</h1>
     </div>
     <div class="vod-area">
         {% if vod_data %}
@@ -15,7 +15,10 @@
                     </div>
                     <div class="vod-object-bottom">
                         <h3>{{vod_data[n][2]}}</h3>
-                        <h4>{{vod_data[n][4]}}</h4>
+                        <div class="date-and-username">
+                            <h4>{{vod_data[n][4]}}</h4>
+                            <h5>{{vod_data[n][6]}}</h5>
+                        </div>
                     </div>
                 </div>
                 </a>
