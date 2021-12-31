@@ -51,9 +51,9 @@
             <div class="isa-bans">
                 <div class="data-point">
                     {% if ban_data[streamer][1] == 0 %}
-                        <h1>{{ streamer }} is NOT currently banned.</h1>
+                        <h1>{{ streamer }} is <span class="live">NOT</span> currently banned.</h1>
                     {% else %}
-                        <h1>{{ streamer }} IS currently banned.</h1>
+                        <h1>{{ streamer }} <span class="not-live">IS</span> currently banned.</h1>
                     {% endif %}
                 </div>
                 <div class="data-point">
