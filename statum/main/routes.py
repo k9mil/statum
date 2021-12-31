@@ -8,8 +8,6 @@ from statum.main.utils.scheduled import periodicIndexClearence
 
 main = Blueprint('main', __name__)
 
-login_url = f"https://id.twitch.tv/oauth2/authorize?client_id={Config.CLIENT_ID}&redirect_uri=https://statoom.herokuapp.com/dashboard&response_type=code&scope=openid+user:read:email&claims={'id_token'}"
-
 @main.route("/")
 def index():
     if session:
@@ -27,8 +25,6 @@ async def dashboard():
         streamer_list = session["user"]["follower_list"]
         user_data_id: int = session["user"]["_id"]
         favourites = User.loadFavourites(user_data_id)
-    # else:
-        # streamer_list = load_default_data()
 
     if f.args:
         header = generateToken()

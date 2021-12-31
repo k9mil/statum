@@ -106,7 +106,10 @@ class User:
         """
 
         if database.twitch_user_data.count_documents({'_id': user_id}) != 0:
-            return database.twitch_user_data.find_one({'_id': user_id})['favourites']
+            try:
+                return database.twitch_user_data.find_one({'_id': user_id})['favourites']
+            except KeyError:
+                pass
         else:
             pass
 
