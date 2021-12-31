@@ -4,6 +4,7 @@ from furl import furl
 from statum.system.models import System
 from statum.users.models import User
 from statum.main.utils.utils import generateToken, twitch_login, send_requests, getVOD, getClips, getStreamerID, getData, getBans, randomIndexedStream, randomStream, addToFavourites, sortVOD
+from statum.main.utils.scheduled import periodicIndexClearence
 
 main = Blueprint('main', __name__)
 

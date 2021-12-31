@@ -36,8 +36,8 @@ class System:
 
         Creates a streams object comprised of an id (static, 1), as well as a streamer list
         under the name of "streamerIDs". It then queries the database to check if an id of "1"
-        exists, that is, if random streamers are already indexed, if so, it passes. Else, it inserts
-        the object into MongoDB.
+        exists, that is, if random streamers are already indexed, if so, it updates the data. Else, it inserts
+        a new object into MongoDB.
 
         Args:
             streamerIDs: A list of streamers to be indexed.
@@ -50,8 +50,11 @@ class System:
             "streamers": streamerIDs
         }
 
-        if database.random_streamer_data.count_documents({'_id': 1}) != 0:
-            pass
+        if database.random_streamer_data.count_documents({"_id": 1}) != 0:
+            database.random_streamer_data.update_one(
+                {"_id" : 1},
+                {"$set": {"streamers": streamerIDs}}
+            )
         else:
             database.random_streamer_data.insert_one(streams)
 
