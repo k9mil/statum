@@ -422,8 +422,56 @@ a {
     margin-bottom: 1rem;
 }
 
+.random-area .random-right h3 {
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.5rem;
+    color: rgb(190, 190, 200);
+    margin-bottom: 1rem;
+}
+
 .random-area .random-right img {
     margin-top: 5rem;
+}
+
+.iframe-dim {
+    height: 360px;
+    width: 640px;
+}
+
+@media (max-width: 1024px) {
+    .random-area {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 0px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .random-area .random-right {
+        margin-top: 5rem;
+    }
+
+    .random-area .random-left {
+        margin-top: 5rem;
+        margin-right: 0rem;
+    }
+
+    /* .random-area .random-right img {
+        text-align: center;
+        justify-content: center;
+    } */
+}
+
+@media (max-width: 768px) {
+    .iframe-dim {
+        height: 288px;
+        width: 512px;
+    }
+
+    .random-area .random-right img {
+        text-align: center;
+    }
 }
 
 /* .random-area .random-right h2:last-child {
