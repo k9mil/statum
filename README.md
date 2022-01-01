@@ -10,7 +10,7 @@ Home Page             |  Dashboard
 :-------------------------:|:-------------------------:
 ![Home Page](https://i.imgur.com/K0mqVVe.jpg)  |  ![Dashboard](https://i.imgur.com/O1Qdh6s.jpg)
 Random             |  VODs
-![Random](https://i.imgur.com/fG35xjo.jpg)  |  ![VODs](https://i.imgur.com/Dm7SFjY.jpg)
+![Random](https://i.imgur.com/XyaxDVV.jpg)  |  ![VODs](https://i.imgur.com/Dm7SFjY.jpg)
 Streamer Page | Favourite VODs
 ![Streamer Page](https://i.imgur.com/5jUeZNk.jpg) | ![favVODs](https://i.imgur.com/FHKyAbs.jpg)
 
