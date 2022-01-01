@@ -9,9 +9,13 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon-16x16') }}" sizes="16x16">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon-32x32') }}" sizes="32x32">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/minified.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <title>Statum — A status tool.</title>
 </head>
 <body>
+    {% block header %}
+    {% endblock %}
     {% block top %}
     {% endblock %}
     {% block streamer %}
