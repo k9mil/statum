@@ -545,10 +545,10 @@ def indexVOD(loop_length: int, api_data: dict, vod_data: list) -> list[list]:
             view_count: str = api_data.json()["data"][n]["view_count"]
             username: str = api_data.json()["data"][n]["user_name"]
             if thumbnail_url == "":
-                vod_data.append(["https://ffwallpaper.com/card/tv-static/tv-static--12.jpg", vod_url, title, duration, date_conversion(creation), ("{:,}".format(view_count)), username])
+                vod_data.append(["https://ffwallpaper.com/card/tv-static/tv-static--12.jpg", vod_url, title, duration, creation, ("{:,}".format(view_count)), username])
             else:
                 thumbnail_url = thumbnail_url.replace("%{width}x%{height}.jpg", "1920x1080.jpg")
-                vod_data.append([thumbnail_url, vod_url, title, duration, date_conversion(creation), ("{:,}".format(view_count)), username])
+                vod_data.append([thumbnail_url, vod_url, title, duration, creation, ("{:,}".format(view_count)), username])
     except IndexError:
         pass
     
@@ -576,7 +576,7 @@ def sort_vod(vod_data):
         ]
     """
 
-    return sorted(vod_data, key=lambda x: datetime.datetime.strptime(x[4], "%d %b, %H:%M"), reverse=True)
+    return sorted(vod_data, key=lambda x: datetime.datetime.strptime(x[4], "%Y-%m-%dT%H:%M:%SZ"), reverse=True)
 
 
 def get_streamer_id(header: dict[str, str], streamer_username: str) -> int:

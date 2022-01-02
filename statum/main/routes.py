@@ -3,7 +3,7 @@ from statum.config import Config
 from furl import furl
 from statum.system.models import System
 from statum.users.models import User
-from statum.main.utils.utils import generate_token, twitch_login, send_requests, get_vod, get_clips, get_streamer_id, get_data, get_bans, random_indexed_stream, random_stream, add_to_favourites, sort_vod
+from statum.main.utils.utils import generate_token, twitch_login, send_requests, get_vod, get_clips, get_streamer_id, get_data, get_bans, random_indexed_stream, random_stream, add_to_favourites, sort_vod, date_conversion
 from statum.main.utils.scheduled import periodic_index_clearance
 
 main = Blueprint('main', __name__)
@@ -87,7 +87,7 @@ async def favourites():
     header: dict[str, str] = generate_token("bearer")
     favourites = User.load_favourites(user_data_id)
     vod_length: int = 0
-    vod_conglomerate = []
+    vod_conglomerate: list[list] = []
 
     for streamer in favourites:
         vod_data = await get_vod(header, streamer, "multiple")  
@@ -95,8 +95,13 @@ async def favourites():
         for n in vod_data:
             vod_conglomerate.append(n)
     
+    vod_conglomerate = sort_vod(vod_conglomerate)
+
+    for n in range(len(vod_conglomerate)):
+        vod_conglomerate[n][4] = date_conversion(vod_conglomerate[n][4])
+
     if vod_length > 0:
-        return render_template("favourites.html", vod_data=sort_vod(vod_conglomerate), vodLength=vod_length)
+        return render_template("favourites.html", vod_data=vod_conglomerate, vodLength=vod_length)
     else:
         return render_template("favourites.html")
 
