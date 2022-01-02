@@ -78,14 +78,14 @@ def favourite(streamer_name):
 @main.route("/settings")
 def settings():
     user_data_id: int = session["user"]["_id"]
-    favourites = User.loadFavourites(user_data_id)
+    favourites = User.load_favourites(user_data_id)
     return render_template("settings.html", favourites=favourites, login_url=Config.LOGIN_URL)
 
 @main.route("/favourites")
 async def favourites():
     user_data_id: int = session["user"]["_id"]
     header: dict[str, str] = generate_token("bearer")
-    favourites = User.loadFavourites(user_data_id)
+    favourites = User.load_favourites(user_data_id)
     vod_length: int = 0
     vod_conglomerate = []
 
