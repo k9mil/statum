@@ -3,8 +3,8 @@ from statum.config import Config
 from furl import furl
 from statum.system.models import System
 from statum.users.models import User
-from statum.main.utils.utils import generateToken, twitch_login, send_requests, getVOD, getClips, getStreamerID, getData, getBans, randomIndexedStream, randomStream, addToFavourites, sortVOD
-from statum.main.utils.scheduled import periodicIndexClearence
+from statum.main.utils.utils import generate_token, twitch_login, send_requests, get_vod, get_clips, get_streamer_id, get_data, get_bans, random_indexed_stream, random_stream, add_to_favourites, sort_vod
+from statum.main.utils.scheduled import periodic_index_clearance
 
 main = Blueprint('main', __name__)
 
@@ -16,20 +16,18 @@ def index():
 
 @main.route("/dashboard")
 async def dashboard():
-    f = furl(request.full_path) 
-    streamer_data = {}
-    top_streamer_data = {}
-    clips_data = {}
+    f: str = furl(request.full_path) 
+    streamer_data: dict = {}
+    top_streamer_data: dict = {}
+    clips_data: dict = {}
 
     if session:
         streamer_list = session["user"]["follower_list"]
         user_data_id: int = session["user"]["_id"]
-        favourites = User.loadFavourites(user_data_id)
-    # else:
-        # streamer_list = load_default_data()
+        favourites = User.load_favourites(user_data_id)
 
     if f.args:
-        header = generateToken()
+        header: dict[str, str] = generate_token()
         twitch_login(header)
         return redirect(url_for("main.dashboard"))
     
@@ -41,22 +39,22 @@ async def dashboard():
     return render_template("dashboard.html", live_data=streamer_data, top_data=top_streamer_data, top_clips=clips_data, favourites=favourites, login_url=Config.LOGIN_URL)
 
 @main.route("/vod/<streamer_name>")
-async def vod(streamer_name):
-    header: dict[str, str] = generateToken("bearer")
-    vod_data = await getVOD(header, streamer_name)
-    vodLength = len(vod_data)
-    if vodLength > 1:
-        return render_template("vod.html", vod_data=vod_data, streamer=streamer_name, vodLength = vodLength)
+async def vod(streamer_name: str):
+    header: dict[str, str] = generate_token("bearer")
+    vod_data = await get_vod(header, streamer_name)
+    vod_length: int = len(vod_data)
+    if vod_length > 0:
+        return render_template("vod.html", vod_data=vod_data, streamer=streamer_name, vodLength=vod_length)
     else:
         return render_template("vod.html", streamer=streamer_name)
 
 @main.route("/streamer/<streamer_name>")
-def streamer(streamer_name):
-    header = generateToken("bearer")
-    top_clips = getClips(header, getStreamerID(header, streamer_name))
-    faq_data = getData(streamer_name)
-    ban_data = getBans(streamer_name)
-    clip_length = len(top_clips)
+def streamer(streamer_name: str):
+    header: dict[str, str] = generate_token("bearer")
+    top_clips: list[list] = get_clips(header, get_streamer_id(header, streamer_name))
+    faq_data: dict[str, list] = get_data(streamer_name)
+    ban_data: dict = get_bans(streamer_name)
+    clip_length: int = len(top_clips)
 
     return render_template("streamer.html", streamer=streamer_name, top_clips=top_clips, faq_data=faq_data, ban_data=ban_data, clip_length=clip_length)
 
@@ -74,7 +72,7 @@ def terms_of_service():
 
 @main.route("/favourite/<streamer_name>")
 def favourite(streamer_name):
-    addToFavourites(streamer_name)
+    add_to_favourites(streamer_name)
     return redirect(url_for("main.dashboard"))
 
 @main.route("/settings")
@@ -86,32 +84,32 @@ def settings():
 @main.route("/favourites")
 async def favourites():
     user_data_id: int = session["user"]["_id"]
-    header: dict[str, str] = generateToken("bearer")
+    header: dict[str, str] = generate_token("bearer")
     favourites = User.loadFavourites(user_data_id)
-    vodLength: int = 0
-    vodConglomerate = []
+    vod_length: int = 0
+    vod_conglomerate = []
 
     for streamer in favourites:
-        vod_data = await getVOD(header, streamer, "multiple")  
-        vodLength += len(vod_data)
+        vod_data = await get_vod(header, streamer, "multiple")  
+        vod_length += len(vod_data)
         for n in vod_data:
-            vodConglomerate.append(n)
+            vod_conglomerate.append(n)
     
-    if vodLength > 1:
-        return render_template("favourites.html", vod_data=sortVOD(vodConglomerate), vodLength = vodLength)
+    if vod_length > 0:
+        return render_template("favourites.html", vod_data=sort_vod(vod_conglomerate), vodLength=vod_length)
     else:
         return render_template("favourites.html")
 
 @main.route("/random")
 def randomHTML():
-    randomData = System.loadRandom()
+    random_data = System.load_random()
 
     try:
-        if randomData['streamers']:
-            user_name = randomIndexedStream(randomData['streamers'])
+        if random_data['streamers']:
+            user_name = random_indexed_stream(random_data['streamers'])
         else:
-            user_name = randomStream()
+            user_name = random_stream()
     except TypeError:
-        user_name = randomStream()
+        user_name = random_stream()
 
     return render_template("random.html", user_name = user_name)

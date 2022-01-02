@@ -9,7 +9,7 @@ class User:
 
     """
 
-    def startSession(self, user):
+    def start_session(self, user):
         """Starts a session.
 
         With session being imported from flask, it assigns the logged_in var to true and the user to the user passed through to the function.
@@ -25,7 +25,7 @@ class User:
         session["user"] = user
         return jsonify(user), 200
 
-    def twitchSignup(self, user_id: int, follower_list: dict[str, str]):
+    def twitch_signup(self, user_id: int, follower_list: dict[str, str]):
         """Adds, or inserts data into the database with the users' follows.
 
         Creates a user object comprised of an id (the user id) as well as the follower list passed through
@@ -52,12 +52,12 @@ class User:
                     {"follower_list": follower_list}
                 }
             )
-            return self.startSession(user)
+            return self.start_session(user)
         else:
             database.twitch_user_data.insert_one(user)
-            return self.startSession(user)
+            return self.start_session(user)
 
-    def addDeleteFavourites(user_id: int, streamer_name: str):
+    def add_delete_favourites(user_id: int, streamer_name: str):
         """Adds/deleted a favourite streamer to the user id.
 
         A query is made to see whether the user exists, if it does, it finds the users' object
@@ -87,7 +87,7 @@ class User:
         else:
             pass
         
-    def loadFavourites(user_id: int) -> list[str]:
+    def load_favourites(user_id: int) -> list[str]:
         """Loads a list of the users' favourite streamer.
 
         It queries the database and if the count isn't 0 (that is, if something is in the database),
@@ -106,7 +106,9 @@ class User:
         """
 
         if database.twitch_user_data.count_documents({'_id': user_id}) != 0:
-            return database.twitch_user_data.find_one({'_id': user_id})['favourites']
+            try:
+                return database.twitch_user_data.find_one({'_id': user_id})['favourites']
+            except KeyError:
+                pass
         else:
             pass
-
