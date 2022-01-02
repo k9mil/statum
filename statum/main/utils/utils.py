@@ -26,9 +26,9 @@ def load_default_data() -> dict[str, str]:
         }
     """
 
-    with open("statum\static\streamers.json", "r") as json_data:
-        streamer_list: dict[str, str] = json.load(json_data)
-        json_data.close()
+    with open("statum\static\streamers.json", "r") as default_streamers:
+        streamer_list: dict[str, str] = json.load(default_streamers)
+        default_streamers.close()
         return streamer_list
 
 def random_indexed_stream(streamers: list[str]) -> str:
@@ -65,12 +65,12 @@ def random_stream() -> str:
     streamer_ids: list[int] = []
 
     header: dict[str, str] = generate_token("bearer")
-    users_followed_url: str = "https://api.twitch.tv/helix/streams"
-    get_streams_request: dict = httpx.get(users_followed_url, headers=header).json()
+    active_streams: str = "https://api.twitch.tv/helix/streams"
+    get_streams_request: dict = httpx.get(active_streams, headers=header).json()
 
     while request_status != False:
-        users_followed_url: str = f"https://api.twitch.tv/helix/streams?first=100&after={get_streams_request['pagination']['cursor']}"
-        get_streams_request: dict = httpx.get(users_followed_url, headers=header).json()
+        active_streams: str = f"https://api.twitch.tv/helix/streams?first=100&after={get_streams_request['pagination']['cursor']}"
+        get_streams_request: dict = httpx.get(active_streams, headers=header).json()
         request_instances: int = (len(get_streams_request["data"]) - 1)
 
         if (get_streams_request['data'][0]['viewer_count'] < MAX_VIEWERS):
@@ -136,12 +136,12 @@ def generate_token(*bearer: str) -> dict[str, str]:
         A header received by the Twitch API.
     """
 
-    f: str = furl(request.full_path)
+    full_url: str = furl(request.full_path)
 
     if bearer:
         auth_url: str = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
     else:
-        auth_url: str = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=https://statoom.herokuapp.com&code={f.args['code']}"
+        auth_url: str = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=http://localhost:5000&code={full_url.args['code']}"
     
     posted_url: dict = httpx.post(auth_url).json()
     header: dict[str, str] = {'Authorization': 'Bearer ' + posted_url["access_token"], 'Client-ID': Config.CLIENT_ID}
@@ -293,8 +293,8 @@ def load_streamers(header: dict[str, str], streamer_list: dict[str, str], stream
     for streamer in streamer_list:
         stream_url += "user_login=" + streamer + "&"
 
-    getDetails = httpx.get(stream_url, headers=header)
-    get_details_json: dict = getDetails.json()
+    get_details = httpx.get(stream_url, headers=header)
+    get_details_json: dict = get_details.json()
 
     for n in get_details_json['data']:
         if n['user_name'].isascii():
@@ -498,12 +498,12 @@ async def get_vod(header: dict[str,str], streamer: str, *multiple_streamers: str
     
     async with httpx.AsyncClient() as client:
         find_video_url: str = f"https://api.twitch.tv/helix/videos?user_id={request_id}&type=archive"
-        response_c: dict = await client.get(find_video_url, headers=header)
-        data = indexVOD(loop_length, response_c, vod_data)
+        api_data: dict = await client.get(find_video_url, headers=header)
+        data = indexVOD(loop_length, api_data, vod_data)
     
     return data
 
-def indexVOD(loop_length: int, response_c: dict, vod_data: list) -> list[list]:
+def indexVOD(loop_length: int, api_data: dict, vod_data: list) -> list[list]:
     """This function aggregates the data from the Twitch object.
 
     It loops over either 3, or 20 times, and fills in a list per video found with the details necessary.
@@ -513,7 +513,7 @@ def indexVOD(loop_length: int, response_c: dict, vod_data: list) -> list[list]:
 
     Args:
         loop_length: The length of the for loop, decided by the optional arg in getVOD().
-        response_c: The Twitch object that is returned.
+        api_data: The Twitch object that is returned.
         vod_data: A list which contains lists of data (the videos).
 
     Returns:
@@ -537,13 +537,13 @@ def indexVOD(loop_length: int, response_c: dict, vod_data: list) -> list[list]:
 
     try:
         for n in range(loop_length):
-            thumbnail_url: str = response_c.json()["data"][n]["thumbnail_url"]
-            vod_url: str = response_c.json()["data"][n]["url"]
-            title: str = response_c.json()["data"][n]["title"]
-            duration: str = response_c.json()["data"][n]["duration"]
-            creation: str = response_c.json()["data"][n]["created_at"]
-            view_count: str = response_c.json()["data"][n]["view_count"]
-            username: str = response_c.json()["data"][n]["user_name"]
+            thumbnail_url: str = api_data.json()["data"][n]["thumbnail_url"]
+            vod_url: str = api_data.json()["data"][n]["url"]
+            title: str = api_data.json()["data"][n]["title"]
+            duration: str = api_data.json()["data"][n]["duration"]
+            creation: str = api_data.json()["data"][n]["created_at"]
+            view_count: str = api_data.json()["data"][n]["view_count"]
+            username: str = api_data.json()["data"][n]["user_name"]
             if thumbnail_url == "":
                 vod_data.append(["https://ffwallpaper.com/card/tv-static/tv-static--12.jpg", vod_url, title, duration, date_conversion(creation), ("{:,}".format(view_count)), username])
             else:
