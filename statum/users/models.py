@@ -112,3 +112,19 @@ class User:
                 pass
         else:
             pass
+
+    def remove_data(user_id: int):
+        """Gets a user_id passed through as an argument and deleted the user data.
+
+        A MongoDB query is ran deleting the data.
+
+        Args:
+            user_id: A user (id) which serves as a unique identifier.
+
+        Returns:
+            None
+        """
+
+        database.twitch_user_data.find_one_and_delete(
+            {"_id": user_id}
+        )

@@ -70,6 +70,15 @@ def privacy():
 def terms_of_service():
     return render_template("tos.html", login_url=Config.LOGIN_URL)
 
+@main.route("/logout")
+def logout():
+    user_data_id: int = session["user"]["_id"]
+    session.pop("user")
+    session.pop("logged_in")
+    print(session)
+    User.remove_data(user_data_id)
+    return redirect(url_for('main.index'))
+
 @main.route("/favourite/<streamer_name>")
 def favourite(streamer_name):
     add_to_favourites(streamer_name)
