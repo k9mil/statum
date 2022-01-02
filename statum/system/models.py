@@ -7,7 +7,7 @@ class System:
     every 10 minutes & loading a random streamer.
 
     """
-    def indexStreamer(self, broadcaster_id: int, broadcaster_username: str):
+    def index_streamer(self, broadcaster_id: int, broadcaster_username: str):
         """Indexes a streamer into the database.
 
         Creates a broadcaster object comprised of an id (the streamer id), as well as the streamer (broadcaster) username,
@@ -31,7 +31,7 @@ class System:
         else:
             database.twitch_streamer_data.insert_one(broadcaster)
 
-    def indexRandomDB(streamerIDs: list[str]):
+    def index_random_db(streamerIDs: list[str]):
         """Indexes streamers into the DB used for the /random/ endpoint.
 
         Creates a streams object comprised of an id (static, 1), as well as a streamer list
@@ -58,7 +58,7 @@ class System:
         else:
             database.random_streamer_data.insert_one(streams)
 
-    def loadRandom() -> dict[int, list[str]]:
+    def load_random() -> dict[int, list[str]]:
         """Loads a random streamer from the database.
 
         It queries the database and if the count isn't 0 (that is, if something is in the database),
@@ -80,7 +80,7 @@ class System:
         else:
             pass
     
-    def loadID(streamer: str) -> id:
+    def load_id(streamer: str) -> id:
         """Loads the equivalent ID of an indexed streamer in the database.
 
         Contains a single line, returns an object where the streamer is matched,
