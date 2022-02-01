@@ -792,6 +792,20 @@ a {
     cursor: pointer;
 }
 
+/* Settings */
+
+.settings-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-2 .setting-forget a {
+    color: #6441a5;
+    box-shadow: #6441a5 0px 10px 40px -10px;
+}
+
 /* Other */
 
 .gradient-color {

@@ -3,7 +3,7 @@ from statum.config import Config
 from furl import furl
 from statum.system.models import System
 from statum.users.models import User
-from statum.main.utils.utils import generate_token, twitch_login, send_requests, get_vod, get_clips, get_streamer_id, get_data, get_bans, random_indexed_stream, random_stream, add_to_favourites, sort_vod
+from statum.main.utils.utils import generate_token, twitch_login, send_requests, get_vod, get_clips, get_streamer_id, get_data, get_bans, random_indexed_stream, random_stream, add_to_favourites, sort_vod, date_conversion
 from statum.main.utils.scheduled import periodic_index_clearance
 
 main = Blueprint('main', __name__)
@@ -70,6 +70,14 @@ def privacy():
 def terms_of_service():
     return render_template("tos.html", login_url=Config.LOGIN_URL)
 
+@main.route("/logout")
+def logout():
+    user_data_id: int = session["user"]["_id"]
+    session.pop("user")
+    session.pop("logged_in")
+    User.remove_data(user_data_id)
+    return redirect(url_for('main.index'))
+
 @main.route("/favourite/<streamer_name>")
 def favourite(streamer_name):
     add_to_favourites(streamer_name)
@@ -78,16 +86,16 @@ def favourite(streamer_name):
 @main.route("/settings")
 def settings():
     user_data_id: int = session["user"]["_id"]
-    favourites = User.loadFavourites(user_data_id)
+    favourites = User.load_favourites(user_data_id)
     return render_template("settings.html", favourites=favourites, login_url=Config.LOGIN_URL)
 
 @main.route("/favourites")
 async def favourites():
     user_data_id: int = session["user"]["_id"]
     header: dict[str, str] = generate_token("bearer")
-    favourites = User.loadFavourites(user_data_id)
+    favourites = User.load_favourites(user_data_id)
     vod_length: int = 0
-    vod_conglomerate = []
+    vod_conglomerate: list[list] = []
 
     for streamer in favourites:
         vod_data = await get_vod(header, streamer, "multiple")  
@@ -95,8 +103,13 @@ async def favourites():
         for n in vod_data:
             vod_conglomerate.append(n)
     
+    vod_conglomerate = sort_vod(vod_conglomerate)
+
+    for n in range(len(vod_conglomerate)):
+        vod_conglomerate[n][4] = date_conversion(vod_conglomerate[n][4])
+
     if vod_length > 0:
-        return render_template("favourites.html", vod_data=sort_vod(vod_conglomerate), vodLength=vod_length)
+        return render_template("favourites.html", vod_data=vod_conglomerate, vodLength=vod_length)
     else:
         return render_template("favourites.html")
 
