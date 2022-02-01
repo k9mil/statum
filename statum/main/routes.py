@@ -75,7 +75,6 @@ def logout():
     user_data_id: int = session["user"]["_id"]
     session.pop("user")
     session.pop("logged_in")
-    print(session)
     User.remove_data(user_data_id)
     return redirect(url_for('main.index'))
 
