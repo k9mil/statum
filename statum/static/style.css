@@ -44,7 +44,7 @@ body {
     z-index: 2;
     width: 100vw;
     height: 60px;
-    padding: 0 12.5%;
+    padding: 0 2.5%;
 }
 
 .header-area .button-area {
@@ -139,11 +139,11 @@ body {
     }
 
     .top-area .top-header h2 {
-        font-size: 3rem;
+        font-size: 2rem;
     }
 
     .top-area .top-header h3 {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 }
 
