@@ -141,7 +141,7 @@ def generate_token(*bearer: str) -> dict[str, str]:
     if bearer:
         auth_url: str = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=client_credentials"
     else:
-        auth_url: str = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=https://46.101.62.143&code={full_url.args['code']}"
+        auth_url: str = f"https://id.twitch.tv/oauth2/token?client_id={Config.CLIENT_ID}&client_secret={Config.AUTH_KEY}&grant_type=authorization_code&redirect_uri=https://http://statum-demo.tk/&code={full_url.args['code']}"
     
     posted_url: dict = httpx.post(auth_url).json()
     header: dict[str, str] = {'Authorization': 'Bearer ' + posted_url["access_token"], 'Client-ID': Config.CLIENT_ID}
