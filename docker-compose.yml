@@ -24,3 +24,8 @@ services:
       - "443:443"
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
+
+  mongo:
+    image: mongo:3.6.1
+    ports:
+      - "27017:27017
