@@ -1,0 +1,110 @@
+{% extends "./base/base.html" %}
+{% block top %}
+    <div class="individual-streamer-area">
+        <div class="individual-streamer-area-left">
+            <div class="isa-faq-header">
+                <h1 class="gradient-color">channel faq.</h1>
+            </div>
+            <div class="isa-faq">
+                <div class="data-point">
+                    <h1>{{ streamer }} Twitch stats</h1>
+                    {% if faq_data[streamer] %}
+                        <h2>In the last 30 days, {{ streamer }} has had a peak of {{ faq_data[streamer][2] }} viewers with an average of {{ faq_data[streamer][1] }} viewers.</h2>
+                    {% else %}
+                        <h2>Unfortunately, we do not have data for this streamer as this point with regards to their viewership.</h2>
+                        {% endif %}
+                </div>
+                <div class="data-point">
+                    <h1>{{ streamer }} rankings on Twitch</h1>
+                    {% if faq_data[streamer] %}
+                        <h2>Last month {{ streamer }} placed rank {{ faq_data[streamer][0] }} on Twitch based on multiple metrics, including viewership, followers & more.</h2>
+                    {% else %}
+                        <h2>Unfortunately, we do not have data for this streamer as this point with regards to their Twitch rank.</h2>
+                        {% endif %}
+                </div>
+                <div class="data-point">
+                    <h1>{{ streamer }} Twitch views stats</h1>
+                    {% if faq_data[streamer] %}
+                        <h2>{{ streamer }} currently has {{ faq_data[streamer][5] }} Total Views on Twitch.</h2>
+                    {% else %}
+                        <h2>Unfortunately, we do not have data for this streamer as this point with regards to their total views.</h2>
+                        {% endif %}
+                </div>
+                <div class="data-point">
+                    <h1>{{ streamer }} Twitch follower count</h1>
+                    {% if faq_data[streamer] %}
+                        <h2>{{ streamer }} currently has {{ faq_data[streamer][4] }} Followers on Twitch, with {{ faq_data[streamer][3] }} followers gained in the last 30 days!</h2>
+                    {% else %}
+                        <h2>Unfortunately, we do not have data for this streamer as this point with regards to their total follower count.</h2>
+                    {% endif %}
+                </div>
+                <div class="data-point">
+                    <h1>How much does {{ streamer }} make on Twitch?</h1>
+                    <h2><a href="https://twitch.pages.dev/earnings/{{ streamer.lower() }}" target="_blank">👀</a></h2>
+                </div>
+            </div>
+        </div>
+        <div class="individual-streamer-area-middle">
+            <div class="isa-bans-header">
+                <h1 class="gradient-color">current ban status.</h1>
+            </div>
+            <div class="isa-bans">
+                <div class="data-point">
+                    {% if ban_data[streamer][1] == 0 %}
+                        <h1>{{ streamer }} is <span class="live">NOT</span> currently banned.</h1>
+                    {% else %}
+                        <h1>{{ streamer }} <span class="not-live">IS</span> currently banned.</h1>
+                    {% endif %}
+                </div>
+                <div class="data-point">
+                    <h1>How many times has {{ streamer }} been banned?</h1>
+                    {% if ban_data[streamer][0][0] %}
+                        <h2>{{ streamer }} has been banned {{ ban_data[streamer][0][0] }} time(s).</h2>
+                    {% else %}
+                        <h2>{{ streamer }} has never been banned.</h2>
+                    {% endif %}
+                </div>
+                <div class="data-point">
+                    <h1>When was {{ streamer }}'s last ban?</h1>
+                    {% if ban_data[streamer][0][1] %}
+                        <h2>{{ streamer }}'s last ban was {{ ban_data[streamer][0][1] }}.</h2>
+                    {% else %}
+                        <h2>{{ streamer }} has never had a last ban, yet.</h2>
+                        {% endif %}
+                </div>
+                <div class="data-point">
+                    <h1>What was {{ streamer }}'s longest ban?</h1>
+                    {% if ban_data[streamer][0][2] %}
+                        <h2>{{ streamer }}'s longest ban was {{ ban_data[streamer][0][2] }}.</h2>
+                    {% else %}
+                        <h2>{{ streamer }}'s longest ban was approximately 0 seconds long.</h2>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    <div class="individual-streamer-area-right">
+        <div class="isa-clips-header">
+            <h1 class="gradient-color">top clips.</h1>
+        </div>
+        <div class="clip-area">
+            {% if top_clips %}
+                {% for n in range(clip_length) %}
+                    <a href="{{top_clips[n][4]}}" target="_blank">
+                    <div class="clip-object">
+                        <div class="vod-object-top">
+                            <img src="{{top_clips[n][5]}}"/>
+                            <span class="views-text">{{top_clips[n][0]}} views</span>
+                            <span class="length-text">{{top_clips[n][1]}} s</span>
+                        </div>
+                        <div class="vod-object-bottom">
+                            <h3>{{top_clips[n][2]}}</h3>
+                            <h4>{{top_clips[n][3]}}</h4>
+                        </div>
+                    </div>
+                    </a>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

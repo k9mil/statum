@@ -1,0 +1,96 @@
+{% extends "./base/base.html" %}
+{% block streamer %}
+    <div class="streamer-area">
+        <div class="area-1 area">
+            <div class="title-1 title-header gradient-color">
+                <h1>followed streamers.</h1>
+            </div>
+            <div class="data-1">
+                {% if session %}
+                    {% for streamer in live_data %}
+                        <div class="div-streamer">
+                            {% if live_data[streamer][0] == "NOT LIVE" %}
+                                <h1 class="streamer-box"><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> is <span class="not-live">{{live_data[streamer][0]}}</span></h1>
+                            {% else %}
+                                <h1><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> has been <span class="live">{{live_data[streamer][0]}}</span> for {{ live_data[streamer][2] }} and is currently playing {{ live_data[streamer][1] }}</h1>
+                            {% endif %}
+                                <div class="clip-area">
+                                    <div class="clip-likes icons">
+                                        <a href="{{ url_for('main.vod', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/tv.svg') }}" alt=""></a>
+                                        <a href="{{ url_for('main.streamer', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/user.svg') }}" alt=""></a>
+                                        {% if favourites %}
+                                            {% if streamer in favourites %}
+                                                <a href="{{ url_for('main.favourite', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/star_fav.svg') }}" alt=""></a>
+                                            {% else %}
+                                                <a href="{{ url_for('main.favourite', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/star.svg') }}" alt=""></a>
+                                            {% endif %}
+                                            {% else %}
+                                                <a href="{{ url_for('main.favourite', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/star.svg') }}" alt=""></a>
+                                        {% endif %}
+                                        <a href="https://twitch.tv/{{ streamer }}" target="_blank"><img src="{{ url_for('static', filename='/img/external-link.svg') }}" alt=""></a>
+                                    </div>
+                                </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="area-2 area">
+            <div class="title-2 title-header gradient-color">
+                <h1>top streamers.</h1>
+            </div>
+            <div class="data-2">
+                {% if session %}
+                    {% for streamer in top_data %}
+                        <div class="div-streamer">
+                            <h1><a href="{{ url_for('main.streamer', streamer_name = streamer) }}">{{streamer}}</a> has been <span class="live">{{top_data[streamer][0]}}</span> for {{ top_data[streamer][2] }} and is currently playing {{ top_data[streamer][1] }}</h1>
+                            <div class="clip-area">
+                                <div class="clip-likes icons">
+                                    <a href="{{ url_for('main.vod', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/tv.svg') }}" alt=""></a>
+                                    <a href="{{ url_for('main.streamer', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/user.svg') }}" alt=""></a>
+                                    {% if favourites %}
+                                        {% if streamer in favourites %}
+                                            <a href="{{ url_for('main.favourite', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/star_fav.svg') }}" alt=""></a>
+                                        {% else %}
+                                            <a href="{{ url_for('main.favourite', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/star.svg') }}" alt=""></a>
+                                        {% endif %}
+                                        {% else %}
+                                            <a href="{{ url_for('main.favourite', streamer_name = streamer) }}"><img src="{{ url_for('static', filename='/img/star.svg') }}" alt=""></a>
+                                    {% endif %}
+                                    <a href="https://twitch.tv/{{ streamer }}" target="_blank"><img src="{{ url_for('static', filename='/img/external-link.svg') }}" alt=""></a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="area-3 area">
+            <div class="title-3 title-header gradient-color">
+                <h1>hot clips.</h1>
+            </div>
+            <div class="data-3">
+                {% if session %}
+                    {% for clip, url in top_clips.items() %}
+                        <div class="div-streamer">
+                            <h1><a href="{{ 'reddit.com'.join(['https://', url[0]]) }}" target=”_blank”>{{clip}}</a></h1>
+                            <div class="clip-area">
+                                <div class="clip-comments">
+                                    <img src="{{ url_for('static', filename='/img/message-square.svg') }}" alt="">
+                                    <h2>{{ url[2] }}</h2>
+                                </div>
+                                <div class="clip-likes">
+                                    <img src="{{ url_for('static', filename='/img/thumbs-up.svg') }}" alt="">
+                                    <h2>{{ url[1] }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block dashboard %}
+<a class="twitch" href="{{login_url}}">Update Following List</a>
+{% endblock %}
