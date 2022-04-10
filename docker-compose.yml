@@ -7,11 +7,11 @@ services:
     container_name: flask
     restart: always
     environment:
-      - APP_NAME: "${APP_NAME}"
-      - API_KEY: "${API_KEY}"
-      - AUTH_KEY: "${AUTH_KEY}"
-      - CLIENT_ID: "${CLIENT_ID}"
-      - MONGO_PASSWORD: "${MONGO_PASSWORD}"
+      APP_NAME: "${APP_NAME}"
+      API_KEY: "${API_KEY}"
+      AUTH_KEY: "${AUTH_KEY}"
+      CLIENT_ID: "${CLIENT_ID}"
+      MONGO_PASSWORD: "${MONGO_PASSWORD}"
     expose:
       - 8080
 
