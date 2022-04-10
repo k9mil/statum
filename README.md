@@ -1,6 +1,6 @@
 # What is statum? 🗺️
 
-statum, a side project, is a web app built in Python, Flask + MongoDB which serves as a tool to make the usage of Twitch more enjoyable, with unique features & the ability to get in-depth information of your most beloved streamers.
+statum, a side project, is a web app built in Python, Flask & MongoDB which serves as a tool to make the usage of Twitch more enjoyable, with unique features & the ability to get in-depth information of your most beloved streamers.
 
 ## Preview
 
@@ -35,7 +35,9 @@ The backlog of the features yet to be implemented are available on a public Trel
 
 ## Demo Server
 
-A demo server is available, on a Heroku deno: [statoom](https://statoom.herokuapp.com/). *note: may or may not be up-to-date.
+A demo server is available, on a Heroku deno: [statum](https://statum-demo.tk/). *note: may or may not be up-to-date.
+
+The demo server is hosted on a DigitalOcean droplet, alongside a custom load-balanced multi architecture built with Docker, Nginx & uWSGI.
 
 ## Installation process
 
