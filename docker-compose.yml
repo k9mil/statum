@@ -12,6 +12,7 @@ services:
       AUTH_KEY: "${AUTH_KEY}"
       CLIENT_ID: "${CLIENT_ID}"
       MONGO_PASSWORD: "${MONGO_PASSWORD}"
+      SECRET_KEY: "${SECRET_KEY}"
     expose:
       - 8080
 
@@ -28,4 +29,4 @@ services:
   mongo:
     image: mongo:3.6.1
     ports:
-      - "27017:27017
+      - "27017:27017"

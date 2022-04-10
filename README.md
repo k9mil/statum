@@ -35,7 +35,7 @@ The backlog of the features yet to be implemented are available on a public Trel
 
 ## Demo Server
 
-A demo server is available, on a Heroku deno: [statoom](https://statoom.herokuapp.com/). *note: may or may not be up-to-date.
+A demo server is available, on a Heroku deno: [statoom](https://statum-demo.tk/). *note: may or may not be up-to-date.
 
 ## Installation process
 

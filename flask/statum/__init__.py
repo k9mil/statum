@@ -4,7 +4,7 @@ from statum.config import Config
 import pymongo, certifi
 
 ca = certifi.where()
-client = pymongo.MongoClient(f"mongodb+srv://statum:{Config.MONGO_PASSWORD}@statum.c5zu0.mongodb.net/statum_db?retryWrites=true&w=majority", tlsCAFile=ca)
+client = pymongo.MongoClient(f"mongodb+srv://statum:{Config.MONGO_PASSWORD}@statum.c5zu0.mongodb.net/statum_db?retryWrites=true&w=majority", tlsCAFile=ca, connect=False)
 database = client.statum_db
 scheduler = APScheduler()
 scheduler.start()
