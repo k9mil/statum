@@ -1,11 +1,11 @@
 version: "3.7"
 
 services:
-
   flask:
     build: ./flask
-    container_name: flask
     restart: always
+    networks: 
+      - "flask.network"
     environment:
       APP_NAME: "${APP_NAME}"
       API_KEY: "${API_KEY}"
@@ -15,11 +15,14 @@ services:
       SECRET_KEY: "${SECRET_KEY}"
     expose:
       - 8080
+    deploy:
+      replicas: 5
 
   nginx:
     build: ./nginx
-    container_name: nginx
     restart: always
+    networks: 
+      - "flask.network"
     ports:
       - "80:80"
       - "443:443"
@@ -28,5 +31,10 @@ services:
 
   mongo:
     image: mongo:3.6.1
+    networks: 
+      - "flask.network"
     ports:
       - "27017:27017"
+
+networks: 
+    flask.network:
