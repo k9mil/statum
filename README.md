@@ -35,9 +35,7 @@ The backlog of the features yet to be implemented are available on a public Trel
 
 ## Demo Server
 
-A demo server is available, on a Heroku deno: [statum](https://statum-demo.tk/). *note: may or may not be up-to-date.
-
-The demo server is hosted on a DigitalOcean droplet, alongside a custom load-balanced multi architecture built with Docker, Nginx & uWSGI.
+A demo server is available, on a DigitalOcean droplet, alongside a custom load-balanced multi architecture built with Docker, Nginx & uWSGI: [statum](https://statum-demo.tk/). *note: may or may not be up-to-date (or down).
 
 ## Installation process
 
